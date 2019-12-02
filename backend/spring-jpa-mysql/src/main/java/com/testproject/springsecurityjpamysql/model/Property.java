@@ -1,15 +1,42 @@
 package com.testproject.springsecurityjpamysql.model;
 
+import java.sql.Date;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 public class Property {
 	
-	@Id
+	@Id 
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	Integer propertyID;
 	
-	String ownerID;
+	@OneToOne(fetch = FetchType.EAGER , cascade = CascadeType.ALL)
+	@JoinColumn(name = "addressID")
+	Address address;
+	
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "userID")
+	UserProfile user;
+	
+	@OneToOne(fetch = FetchType.EAGER , cascade = CascadeType.ALL)
+	@JoinColumn(name = "parkingID")
+	Parking parking;
+	
+	@OneToOne(fetch = FetchType.EAGER , cascade = CascadeType.ALL)
+	@JoinColumn(name = "availabilityID")
+	Availability availability;
+		
+	String propertyName;
 	String sharingType;
 	String description;
 	String propertyType;
@@ -20,11 +47,73 @@ public class Property {
 	Boolean privateShowerAvailable;
 	Float rentWeekday;
 	Float rentWeekend;
-	Integer addressID;
-	Integer parkingID;
+		
 	Boolean booked;
 	Boolean checkedIn;
+	Boolean internetAvailable;
 	
+	
+	public Property() { }
+		
+	
+	public String getPropertyName() {
+		return propertyName;
+	}
+
+	public void setPropertyName(String propertyName) {
+		this.propertyName = propertyName;
+	}
+	
+	
+	public Address getAddress() {
+		return address;
+	}
+
+
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+
+
+	public UserProfile getUser() {
+		return user;
+	}
+
+
+	public void setUser(UserProfile user) {
+		this.user = user;
+	}
+
+
+	public Parking getParking() {
+		return parking;
+	}
+
+
+	public void setParking(Parking parking) {
+		this.parking = parking;
+	}
+
+
+	public Boolean getInternetAvailable() {
+		return internetAvailable;
+	}
+
+
+	public void setInternetAvailable(Boolean internetAvailable) {
+		this.internetAvailable = internetAvailable;
+	}
+
+
+	public Availability getAvailability() {
+		return availability;
+	}
+
+
+	public void setAvailability(Availability availability) {
+		this.availability = availability;
+	}
+
 	
 	public Integer getPropertyID() {
 		return propertyID;
@@ -36,13 +125,13 @@ public class Property {
 	}
 
 
-	public String getOwnerID() {
-		return ownerID;
+	public UserProfile getUserID() {
+		return user;
 	}
 
 
-	public void setOwnerID(String ownerID) {
-		this.ownerID = ownerID;
+	public void setUserID(UserProfile user) {
+		this.user = user;
 	}
 
 
@@ -146,23 +235,23 @@ public class Property {
 	}
 
 
-	public Integer getAddressID() {
-		return addressID;
+	public Address getAddressID() {
+		return address;
 	}
 
 
-	public void setAddressID(Integer addressID) {
-		this.addressID = addressID;
+	public void setAddressID(Address addressID) {
+		this.address = addressID;
 	}
 
 
-	public Integer getParkingID() {
-		return parkingID;
+	public Parking getParkingID() {
+		return parking;
 	}
 
 
-	public void setParkingID(Integer parkingID) {
-		this.parkingID = parkingID;
+	public void setParkingID(Parking parkingID) {
+		this.parking = parkingID;
 	}
 
 
@@ -185,9 +274,6 @@ public class Property {
 		this.checkedIn = checkedIn;
 	}
 
-
 	
-	
-	public Property() { }
 	
 }

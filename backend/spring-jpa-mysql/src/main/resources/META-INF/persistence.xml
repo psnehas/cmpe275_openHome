@@ -6,7 +6,9 @@
         <!-- Persistence provider -->
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <!-- Entity classes -->
+        <class>com.testproject.springsecurityjpamysql.model.Property</class>
         <class>com.testproject.springsecurityjpamysql.model.UserProfile</class>
+        
         <properties>
         	<property name="hibernate.dialect" value = "org.hibernate.dialect.MySQL5Dialect" />
             <!-- The JDBC driver of your database -->
