@@ -68,7 +68,7 @@ public class UserResource {
 		//Add user to database
 		uService.registerUser(user);
 		
-		String link = "http://localhost:8080/user/activate/"+user.getUserID();
+		String link = "http://localhost:8081/user/activate/"+user.getUserID();
 		
 		try {
 			sendEmail(user.getUserID() , "OpenHome Account Activation", "Click here to activate ->"+link);
