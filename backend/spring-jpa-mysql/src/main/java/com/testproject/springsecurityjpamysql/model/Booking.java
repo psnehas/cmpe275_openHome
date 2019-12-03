@@ -23,6 +23,17 @@ public class Booking {
 	
 	public Booking() { 	}
 
+	
+	public Float getPayment() {
+		return payment;
+	}
+
+
+	public void setPayment(Float payment) {
+		this.payment = payment;
+	}
+
+
 	public Integer getPropertyID() {
 		return propertyID;
 	}

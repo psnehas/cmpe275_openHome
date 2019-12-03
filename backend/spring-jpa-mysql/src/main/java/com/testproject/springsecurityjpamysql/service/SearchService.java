@@ -248,6 +248,7 @@ public class SearchService {
 
 	public ResponseEntity<String> checkIn(Integer propertyID, Float payment, String userID) {
 				
+		
 		//Get card number from UserProfile
 		UserProfile user = new UserProfile();
 		user.setUserID(userID);
@@ -267,7 +268,15 @@ public class SearchService {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Character - "+current+" at position = "+i);
 		}
 		
-		//Set checkedIn = true
+		//Set payment in booking table
+		Booking booking = new Booking();
+		booking.setPropertyID(propertyID);
+		Example<Booking> bookingExample = Example.of(booking);
+		Booking bookingObject = bookingRepo.findOne(bookingExample).get();
+		bookingObject.setPayment(payment);
+		bookingRepo.save(bookingObject);
+		
+		//Set checkedIn = true in property table
 		Property p = new Property();
 		p.setPropertyID(propertyID);
 		Example<Property> propExample = Example.of(p);
@@ -276,10 +285,10 @@ public class SearchService {
 		postRepo.save(prop);
 		
 		//Get Booking details
-		Booking b = new Booking();
-		b.setPropertyID(propertyID);
-		Example<Booking> booking = Example.of(b);
-		Booking bookingObject = bookingRepo.findOne(booking).get();
+//		Booking b = new Booking();
+//		b.setPropertyID(propertyID);
+//		Example<Booking> booking = Example.of(b);
+//		Booking bookingObject = bookingRepo.findOne(booking).get();
 		
 		//Send notification 
 		String msgBody = "Hello "+userObject.getFirstName()+" "+userObject.getLastName()
