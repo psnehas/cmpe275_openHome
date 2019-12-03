@@ -1,6 +1,8 @@
 package com.testproject.springsecurityjpamysql.model;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -47,6 +49,8 @@ public class Property {
 	Boolean privateShowerAvailable;
 	Float rentWeekday;
 	Float rentWeekend;
+	
+	ArrayList<Booking> bookings;
 		
 	Boolean booked;
 	Boolean checkedIn;
@@ -56,6 +60,16 @@ public class Property {
 	public Property() { }
 		
 	
+	public List<Booking> getBookings() {
+		return bookings;
+	}
+
+
+	public void setBookings(ArrayList<Booking> bookings) {
+		this.bookings = bookings;
+	}
+
+
 	public String getPropertyName() {
 		return propertyName;
 	}

@@ -1,5 +1,6 @@
 package com.testproject.springsecurityjpamysql.resource;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.testproject.springsecurityjpamysql.model.Booking;
 import com.testproject.springsecurityjpamysql.model.Property;
 import com.testproject.springsecurityjpamysql.model.UserProfile;
@@ -28,15 +31,41 @@ public class DashboardResource {
 	BookingRepository bookingRepo;
 	
 	
-	@GetMapping("/owner/{ownerid}")
-	public List<Property> getOwnerDashboard(@PathVariable String ownerid) {
+	@GetMapping("/owner/{ownerID}")
+	public String getOwnerDashboard(@PathVariable String ownerID) {
+		
+//		Booking b = new Booking();
+//		b.setOwnerID(ownerID);
+//		Example<Booking> bookings = Example.of(b);				
+//		List<Booking> bList = bookingRepo.findAll(bookings);
 		
 		Property p = new Property();
 		UserProfile owner = new UserProfile();
-		owner.setUserID(ownerid);
+		owner.setUserID(ownerID);
 		p.setUser(owner);
+		p.setBooked(true);
 		Example<Property> propExample = Example.of(p);				
-		return postRepo.findAll(propExample);
+		List<Property> pList = postRepo.findAll(propExample);
+		
+		String res = "";
+		
+		for(Property temp : pList) {
+			
+			Booking b = new Booking();
+			b.setPropertyID(temp.getPropertyID());
+			Example<Booking> bookings = Example.of(b);
+			ArrayList<Booking> bookedList = (ArrayList<Booking>) bookingRepo.findAll(bookings);
+			
+			temp.setBookings(bookedList);
+			
+			Gson g = new Gson();
+			JsonElement jsonElement = g.toJsonTree(temp);
+					
+			res += g.toJson(jsonElement);
+					
+		}
+		
+		return res;
 		
 	}
 	
