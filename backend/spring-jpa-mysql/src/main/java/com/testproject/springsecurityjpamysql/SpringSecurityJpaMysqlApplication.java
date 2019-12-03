@@ -13,11 +13,11 @@ public class SpringSecurityJpaMysqlApplication {
 		SpringApplication.run(SpringSecurityJpaMysqlApplication.class, args);
 	}
 	
-	
-	@Bean
-	public LocalEntityManagerFactoryBean entityManagerFactory(){
-	     LocalEntityManagerFactoryBean factoryBean = new LocalEntityManagerFactoryBean();
-	    factoryBean.setPersistenceUnitName("OpenHome");
-	    return factoryBean;
-	}
+//	
+//	@Bean
+//	public LocalEntityManagerFactoryBean entityManagerFactory(){
+//	     LocalEntityManagerFactoryBean factoryBean = new LocalEntityManagerFactoryBean();
+//	    factoryBean.setPersistenceUnitName("OpenHome");
+//	    return factoryBean;
+//	}
 }

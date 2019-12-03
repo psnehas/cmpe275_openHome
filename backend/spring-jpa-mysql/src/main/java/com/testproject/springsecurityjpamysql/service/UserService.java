@@ -4,6 +4,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import com.testproject.springsecurityjpamysql.model.UserProfile;
@@ -15,7 +16,7 @@ public class UserService {
 	@Autowired
 	UserRepository userRepo;
 	
-	public void addUser(UserProfile user) {
+	public void registerUser(UserProfile user) {
 		
 		userRepo.save( user );
 		
@@ -27,10 +28,36 @@ public class UserService {
 			return userRepo.findById(userid).get();
 		}
 		catch(NoSuchElementException e) {
-			System.out.println("No such user can be found");
+			throw e;
+		}
+				
+	}
+
+	public void verifyUser(String userID) {
+		
+		UserProfile u = new UserProfile();
+		u.setUserID(userID);
+		
+		
+		Example<UserProfile> ex = Example.of(u);
+		
+		UserProfile user = userRepo.findOne(ex).get();
+		user.setVerified(true);
+		userRepo.save(user);
+		
+	}
+
+	public void registerGoogleUser(String userID) {
+		
+		UserProfile u = new UserProfile();
+		u.setUserID(userID);	
+		Example<UserProfile> ex = Example.of(u);
+		UserProfile user = userRepo.findOne(ex).get();
+		if(user == null) {
+			u.setPassword("googleUser");
 		}
 		
-		return null;		
+		
 	}
 
 	

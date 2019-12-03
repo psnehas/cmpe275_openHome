@@ -18,22 +18,40 @@ public class UserProfile {
 	String cardNumber;
 	String cvv;
 	Date expirationDate;
+	String password;
+	Boolean verified;
 	
 		
+	public Boolean getVerified() {
+		return verified;
+	}
+
+	public void setVerified(Boolean verified) {
+		this.verified = verified;
+	}
+
 	public UserProfile() {	 }
 
-	public UserProfile(String userID, String firstName, String lastName, String phoneNumber, String role) {
-		this.userID = userID;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.phoneNumber = phoneNumber;
-		this.role = role;
-	}
+//	public UserProfile(String userID, String firstName, String lastName, String phoneNumber, String role) {
+//		this.userID = userID;
+//		this.firstName = firstName;
+//		this.lastName = lastName;
+//		this.phoneNumber = phoneNumber;
+//		this.role = role;
+//	}
 	
 		
 
 	public String getFirstName() {
 		return firstName;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public void setFirstName(String firstName) {
