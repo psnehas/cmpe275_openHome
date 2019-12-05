@@ -104,15 +104,14 @@ public class UserResource {
 		Map map = g.fromJson(g.toJson(userCred), Map.class);	
 		String userID = (String) map.get("userID");
 		String password = (String) map.get("password");
-		String role = (String)map.get("role");
+		//String role = (String)map.get("role");
 		
 		UserProfile user = uService.getUserObject(userID);
 		
 		return user.getPassword().equals(password) && 
 				user.getUserID().equals(userID)  &&
-				user.getRole().contentEquals(role) &&
 				user.getVerified() ? 
-					ResponseEntity.status(HttpStatus.OK).body(role): 
+					ResponseEntity.status(HttpStatus.OK).body(user.getRole()): 
 						ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Login failed");
 								
 	}
