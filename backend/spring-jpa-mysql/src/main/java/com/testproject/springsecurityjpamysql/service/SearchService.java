@@ -101,7 +101,9 @@ public class SearchService {
 					case "endDate" :
 						endDate =  (Date) f.get(filter);
 						break;	
-					}				
+					}
+				
+				
 			}				
 		}
 		
@@ -125,7 +127,7 @@ public class SearchService {
 			Example<Property> propExample = Example.of(p);		
 			list =  postRepo.findAll(propExample);
 		}
-			
+		
 		
 		for(Property p : new ArrayList<Property>(list)) {
 			
@@ -159,7 +161,9 @@ public class SearchService {
 					
 					List<Booking> bTempList = bookingRepo.findAll(bex);
 					for(Booking bTemp : bTempList)  {
-											
+						
+						
+						
 						if( !(( bTemp.getStartDate().before(startDate) && 
 									bTemp.getEndDate().before(startDate) ) || 
 								( bTemp.getStartDate().after(endDate) && 
@@ -258,15 +262,6 @@ public class SearchService {
 
 	public void addPosting(Property p) {		
 		postRepo.save(p);		
-	}
-	
-	public Property getProperty(Integer propertyID) {
-		
-		Property p = new Property(); 
-		p.setPropertyID(propertyID);
-		Example<Property> pExample = Example.of(p);
-		return postRepo.findOne(pExample).get();
-		
 	}
 
 

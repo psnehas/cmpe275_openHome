@@ -3,7 +3,6 @@ package com.testproject.springsecurityjpamysql.resource;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
@@ -215,77 +214,7 @@ public class BookingResource {
 		
 		bookingService.removeBooking(propertyID, startDate, endDate, charge);
 		return ResponseEntity.ok().body("Final cancellation charges = "+charge); 	
-				
+//		
+		
 	}	
-	
-	
-	@DeleteMapping(value = "owner/cancel" , consumes = MediaType.APPLICATION_JSON_VALUE ) 
-	public ResponseEntity<String> cancelBookingOwner(@RequestBody Object propObjectJSON) throws Exception {
-		
-		Gson g = new Gson();
-		Map map = g.fromJson(g.toJson(propObjectJSON), Map.class);	
-		Integer propertyID = Integer.parseInt(map.get("propertyID").toString());
-		Date cancelTime = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(map.get("cancelTime").toString());
-		Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(map.get("startDate").toString());
-		Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse(map.get("endDate").toString());
-		Booking bookingObj = bookingService.getBookingObject(propertyID, startDate);
-		String tempDate = jumpDayCalendar(map.get("startDate").toString() , -7);
-		Date validCancelDate = new SimpleDateFormat("yyyy-MM-dd").parse(tempDate);
-		Float penalty = 0f;
-		
-		Property propObject = searchService.getProperty(propertyID);
-		
-		Date validStartDate = new SimpleDateFormat("yyyy-MM-dd").parse(map.get("startDate").toString());		
-		
-		if(cancelTime.before(validCancelDate)) {			
-//			bookingService.removeBooking(propertyID, startDate, endDate, charge);
-			return ResponseEntity.ok().body("Booking has been cancelled. No penalty"); 
-		}
-		else if(cancelTime.after(validCancelDate) && cancelTime.before(startDate)) {
-			
-			Float parkingFee = 0f;
-			
-			if(propObject.getParking().isAvailable() && propObject.getParking().isPaid() ) 
-				penalty += propObject.getParking().getDailyFee();
-			
-			
-			if(startDate.getDay() == 0 && startDate.getDay() == 6) 
-				penalty += bookingObj.getBookedrentWeekend() * 0.15f;
-			
-			else 
-				penalty += bookingObj.getBookedrentWeekday() * 0.15f;	
-			
-		}
-		else if(cancelTime.after(startDate)) {
-			int daysRemaining = (int) ((endDate.getTime() - cancelTime.getTime())/1000/60/60/24);
-			System.out.println("Days remaining - "+daysRemaining);
-			//check if cancelTime is before or after 3 PM
-			System.out.println("Cancel time - "+cancelTime.getHours());
-			if(cancelTime.getHours() < 15 ) {
-				
-				penalty += daysRemaining*bookingObj.getBookedrentWeekday()*0.15f;
-				System.out.println("Cancel time is before 3 PM. Penalty  - "+penalty);
-			}
-			else if(cancelTime.getHours() >= 15) {
-				if(daysRemaining > 2) 
-					penalty += (daysRemaining-1)*bookingObj.getBookedrentWeekday()*0.15f;
-				else 
-					penalty += bookingObj.getBookedrentWeekday()*0.15f;
-				
-				System.out.println("Cancel time is after 3 PM. Penalty  - "+penalty);
-			}
-			
-		}
-			
-		return ResponseEntity.ok().body("Booking has been cancelled. Penalty = "+penalty);
-			
-	}
-	
-	
-	
-	
-	
-	
-	
-	
 }
