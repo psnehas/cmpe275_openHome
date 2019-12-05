@@ -2,6 +2,7 @@ package com.testproject.springsecurityjpamysql.resource;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
@@ -72,7 +73,7 @@ public class BookingResource {
 		validStart.setHours(15);
 		
 		//Valid endDate
-		String incrementedDate = addOneDayCalendar(map.get("startDate").toString());
+		String incrementedDate = jumpDayCalendar(map.get("startDate").toString() , 1);
 		Date validEnd = new SimpleDateFormat("yyyy-MM-dd").parse(incrementedDate);
 		validEnd.setHours(3);
 		
@@ -85,8 +86,7 @@ public class BookingResource {
 		}
 		else if(checkIn.after(validEnd)) {
 			 
-			//Get booking object
-							
+			//Get booking object							
 			Booking bObj = bookingService.getBookingObject(propertyID,startDate);			
 			Float charge = 0f;
 			
@@ -127,40 +127,94 @@ public class BookingResource {
 				
 	}
 	
-	public static String addOneDayCalendar(String date) 
+	public static String jumpDayCalendar(String date , int d) 
 			  throws ParseException {
 			  
 	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	    Calendar c = Calendar.getInstance();
 	    c.setTime(sdf.parse(date));
-	    c.add(Calendar.DATE, 1);
+	    c.add(Calendar.DATE, d);
 	    return sdf.format(c.getTime());
 	}
 	
-	@DeleteMapping(value = "user/cancel" , consumes = MediaType.APPLICATION_JSON_VALUE ) 
-	public ResponseEntity<String> cancelBooking(@RequestBody Object propObject) {
-		
+	
+	@PutMapping(value = "/user/checkout" , consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> checkout(@RequestBody Object checkOutObject) throws Exception {
+		//create JSON map
 		Gson g = new Gson();
-		Map map = g.fromJson(g.toJson(propObject), Map.class);	
-		Integer propertyID = (Integer) map.get("propertyID");
-		Date startDate = (Date) map.get("startDate");
-		Date endDate = (Date) map.get("endDate");
-		Float payment = (Float) map.get("payment");
+		Map map = g.fromJson(g.toJson(checkOutObject), Map.class);		
+		System.out.println(map);
 		
-		try {
-			searchService.removeBooking(propertyID);		
-			bookingService.removeBooking(propertyID,startDate,endDate,payment);
-		}
-		catch(Exception e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cancel booking failed");
-		}
+		Integer propertyID =  Integer.parseInt(map.get("propertyID").toString());	
+		Date checkOut = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(map.get("checkOutTime").toString());
+		Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse(map.get("endDate").toString());
 		
-		return ResponseEntity.status(HttpStatus.OK).body("Booking cancelled successfully");
+		Date validCheckOutTime = endDate; 
+		endDate.setHours(11);
+		
+		if(checkOut.before(validCheckOutTime)) {
+			
+			Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(map.get("startDate").toString());
+			Float charge = 0f;
+			bookingService.removeBooking(propertyID, startDate, endDate, charge);
+			
+			return ResponseEntity.ok().body("You have been checked out.");
+			
+		}
+		else {
+			//cancellation logic
+		}
+				
+		return null;
 		
 	}
 	
+	
+	@DeleteMapping(value = "user/cancel" , consumes = MediaType.APPLICATION_JSON_VALUE ) 
+	public ResponseEntity<String> cancelBooking(@RequestBody Object propObject) throws Exception {
+		
+		Gson g = new Gson();
+		Map map = g.fromJson(g.toJson(propObject), Map.class);	
+		Integer propertyID = Integer.parseInt(map.get("propertyID").toString());
+		Date cancelTime = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(map.get("cancelTime").toString());
+		Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(map.get("startDate").toString());
+		Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse(map.get("endDate").toString());
 
-	
-	
-	
+		Booking bObj = bookingService.getBookingObject(propertyID,startDate);
+		
+		String temp = jumpDayCalendar(map.get("startDate").toString() , -1);
+		Date validCancelDate = new SimpleDateFormat("yyyy-MM-dd").parse(temp);
+		validCancelDate.setHours(15);
+		
+		Date validStartDate = new SimpleDateFormat("yyyy-MM-dd").parse(map.get("startDate").toString());
+		validStartDate.setHours(15);
+				
+		Float charge = 0f;
+		if(cancelTime.before(validCancelDate)) {
+			return ResponseEntity.ok().body("Your booking has been cancelled successfully"); 
+		}		
+		else if(cancelTime.after(validCancelDate)) {
+								
+			if(startDate.getDay() == 0 || startDate.getDay() == 6) {
+				charge += bObj.getBookedrentWeekend()*0.3f;
+			}
+			else {
+				charge += bObj.getBookedrentWeekday()*0.3f;
+			}			
+		}
+		
+		if(cancelTime.after(validStartDate)) {
+			if(startDate.getDay() != 6) {
+				charge += bObj.getBookedrentWeekday()*0.3f;
+			}
+			else {
+				charge += bObj.getBookedrentWeekend()*0.3f;
+			}				
+		}
+		
+		bookingService.removeBooking(propertyID, startDate, endDate, charge);
+		return ResponseEntity.ok().body("Final cancellation charges = "+charge); 	
+//		
+		
+	}	
 }
