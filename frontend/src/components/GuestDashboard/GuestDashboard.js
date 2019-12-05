@@ -28,7 +28,7 @@ class GuestDashboard extends Component {
       startDate: "",
       endDate: "",
       checkedIn: false,
-      checkedOut: false,
+      checkOut: false,
       cancelled: false,
       openhomeClock: ""
     };
@@ -40,15 +40,22 @@ class GuestDashboard extends Component {
 
   handlecheckIn = (e, propertyID) => {
     const requestBody = {
-      propertyID: propertyID
+      propertyID: propertyID,
+      startDate: this.state.startDate,
+      endDate: this.state.endDate,
+      checkInTime: this.state.openhomeClock
     };
 
     axios.put(API_ENDPOINT + "/booking/checkin", requestBody).then(response => {
       if (response.status == 200) {
+        window.alert(response.data);
+
         this.setState({
           checkedIn: true
         });
       } else {
+        window.alert(response.data);
+
         this.setState({
           checkedIn: false
         });
@@ -61,28 +68,35 @@ class GuestDashboard extends Component {
       propertyID: propertyID,
       startDate: startDate,
       endDate: endDate,
-      checkedInTime: this.state.openhomeClock
+      checkOutTime: this.state.openhomeClock
     };
 
-    axios.put(API_ENDPOINT + "/booking/checkin", requestBody).then(response => {
-      if (response.status == 200) {
-        this.setState({
-          checkedIn: true
-        });
-      } else {
-        this.setState({
-          checkedIn: false
-        });
-      }
-    });
+    axios
+      .put(API_ENDPOINT + "/booking/checkout", requestBody)
+      .then(response => {
+        if (response.status == 200) {
+          window.alert(response.data);
+
+          this.setState({
+            checkedIn: true
+          });
+        } else {
+          window.alert(response.data);
+
+          this.setState({
+            checkedIn: false
+          });
+        }
+      });
   };
 
   handleCancel = (e, propertyID) => {
     const requestBody = {
       propertyID: propertyID,
-      payment: this.state.payment
+      startDate: "",
+      endDate: "",
+      cancelTime: ""
     };
-
     axios.put(API_ENDPOINT + "/booking/cancel", requestBody).then(response => {
       if (response.status == 200) {
         this.setState({
@@ -100,15 +114,20 @@ class GuestDashboard extends Component {
     axios.get(API_ENDPOINT + "/clock/current").then(response => {
       console.log("CLOCK API", response.data);
 
+      var check = new Date(response.data);
+      var dateS = moment(check).format("YYYY-MM-DD");
+      var timeS = moment(check).format("HH:MM");
+      var dateFinal = dateS + " " + timeS;
+
       if (response.status == 200) {
         this.setState({
-          openhomeClock: response.data
+          openhomeClock: dateFinal
         });
       }
     });
 
     axios
-      .get(`${API_ENDPOINT}/hostproperties/${this.state.email}`)
+      .get(`${API_ENDPOINT}/dashboard/user/${this.state.email}`)
       .then(response => {
         console.log(response.data);
 

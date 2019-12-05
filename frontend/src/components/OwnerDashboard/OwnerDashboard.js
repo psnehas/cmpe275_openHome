@@ -23,13 +23,11 @@ class OwnerDashboard extends Component {
     // const { city, startDate, endDate, properties } = this.props.location.state;
 
     this.state = {
-      email: window.localStorage.getItem("user"),
+      email: window.localStorage.getItem("host"),
       properties: [],
-      payment: 1231,
-      checkedIn: false,
-      checkedOut: false,
       cancelled: false,
-      editedFlag: false
+      editedFlag: false,
+      openhomeClock: ""
     };
 
     this.handleEdit = this.handleEdit.bind(this);
@@ -41,7 +39,7 @@ class OwnerDashboard extends Component {
       propertyID: propertyID
     };
 
-    axios.put(API_ENDPOINT + "/booking/edit", requestBody).then(response => {
+    axios.put(API_ENDPOINT + "/posting/place", requestBody).then(response => {
       if (response.status == 200) {
         this.setState({
           editedFlag: true
@@ -56,27 +54,48 @@ class OwnerDashboard extends Component {
 
   handleCancel = (e, propertyID) => {
     const requestBody = {
-      propertyID: propertyID
+      propertyID: propertyID,
+      startDate: "",
+      endDate: "",
+      cancelTime: this.state.openhomeClock
     };
 
-    axios.put(API_ENDPOINT + "/booking/cancel", requestBody).then(response => {
-      if (response.status == 200) {
-        this.setState({
-          cancelled: true
-        });
-      } else {
-        this.setState({
-          cancelled: false
-        });
-      }
-    });
+    axios
+      .delete(API_ENDPOINT + "/booking/owner/cancel", requestBody)
+      .then(response => {
+        if (response.status == 200) {
+          window.alert("Booking Cancelled");
+          window.location.reload();
+
+          this.setState({
+            cancelled: true
+          });
+        } else {
+          this.setState({
+            cancelled: false
+          });
+        }
+      });
   };
 
   componentDidMount() {
+    axios.get(API_ENDPOINT + "/clock/current").then(response => {
+      console.log("CLOCK API", response.data);
+
+      var date = new Date(response.data);
+      console.log("formatted date: ", date.toString());
+
+      if (response.status == 200) {
+        this.setState({
+          openhomeClock: response.data
+        });
+      }
+    });
+
     axios
-      .get(`${API_ENDPOINT}/hostproperties/${this.state.email}`)
+      .get(`${API_ENDPOINT}/dashboard/owner/${this.state.email}`)
       .then(response => {
-        console.log(response.data);
+        console.log("PROPERTIES", response.data);
 
         if (response.status == 200) {
           this.setState({
@@ -87,7 +106,7 @@ class OwnerDashboard extends Component {
   }
 
   render() {
-    console.log(this.state.internetAvailable);
+    console.log("PROPERTIES:  ", this.state.properties);
     //PROPERTY CARD CODE:
     let propertyCard = this.state.properties.map(property => {
       return (

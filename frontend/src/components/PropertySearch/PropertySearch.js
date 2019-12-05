@@ -534,7 +534,7 @@ class PropertySearch extends Component {
           <div class="row">
             <div class="col-lg-8 col-md-6 col-sm-6 ">
               {/* INSERT PROPERTY CARD HERE */}
-              <div> HELLO </div>
+
               <div> {propertyCard} </div>
               {/* DEMO PROPERTY CARD STARTS */}
               {/* <div class="card mb-3 ml-6" style={{ "max-width": "540px" }}>

@@ -120,11 +120,12 @@ class PropertyDetails extends Component {
 
   estimation = () => {
     if (this.state.isEstimated === true)
-      return (
-        <a style={{ fontSize: 12 }}>
-          Your Estimated rent is: ${this.state.estimate}{" "}
-        </a>
-      );
+      console.log("estimate:", this.state.estimate);
+    return (
+      <a style={{ fontSize: 12 }}>
+        Your Estimated rent is: ${this.state.estimate}{" "}
+      </a>
+    );
     if (this.state.isEstimated === false)
       return <b style={{ fontSize: 13, color: "red" }}>Enter Valid Dates </b>;
     else return "";
@@ -425,9 +426,15 @@ class PropertyDetails extends Component {
                   </div>
                 </div>
               </div>
-
-              <div class="col-lg-6 col-md-6 col-sm-6 ">
-                <div class="card w-50">
+              <div className="col-lg-2 col-md-2 col-sm-2"> </div>
+              <div class="col-lg-4 col-md-4 col-sm-4 ">
+                <div
+                  class="card w-50"
+                  style={{
+                    "margin-top": "0%",
+                    "margin-left": "34%"
+                  }}
+                >
                   <div class="card-body">
                     <h5 class="card-title">Booking Details</h5>
                     <div align="left" style={{ fontSize: 13 }}>
@@ -517,13 +524,16 @@ class PropertyDetails extends Component {
                     <br></br>
                     {this.estimation()}
                     <br></br>
-                    <a
-                      href="#"
-                      class="btn btn-primary mt-4"
-                      onClick={this.handleBooking}
-                    >
-                      Book Now
-                    </a>
+
+                    {!this.state.bookedFlag && (
+                      <a
+                        href="#"
+                        class="btn btn-primary mt-4"
+                        onClick={this.handleBooking}
+                      >
+                        Book Now
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>

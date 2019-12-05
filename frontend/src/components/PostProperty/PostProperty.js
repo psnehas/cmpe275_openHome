@@ -41,6 +41,7 @@ class PostProperty extends Component {
       images: "",
       isUploaded: "",
       dataEdited: "",
+      finalImages: "",
       imageUrl: [],
       urls: "",
       mon: false,
@@ -137,7 +138,7 @@ class PostProperty extends Component {
               tempUrl = tempUrl + str + ",";
             }
             finalUrl = tempUrl.slice(0, -1);
-
+            this.setState({ finalImages: finalUrl });
             console.log("finalURL:::", finalUrl);
 
             this.setState({ isUploaded: true });
@@ -178,7 +179,7 @@ class PostProperty extends Component {
       checkedIn: this.state.checkedIn,
       internetAvailable: this.state.internetAvailable,
       alwaysAvailable: this.state.alwaysAvailable,
-      images: this.state.images,
+      images: this.state.finalImages,
       parking: {
         available: this.state.available,
         paid: this.state.paid,
@@ -190,7 +191,7 @@ class PostProperty extends Component {
 
       privateBathAvailable: this.state.privateBathAvailable,
       privateShowerAvailable: this.state.privateShowerAvailable,
-      images: this.state.images,
+
       availablity: {
         alwaysAvailable: this.state.alwaysAvailable,
         mon: this.state.mon,
@@ -202,6 +203,8 @@ class PostProperty extends Component {
         sun: this.state.sun
       }
     };
+
+    console.log("REQ BODY POST", requestBody);
 
     axios.post(API_ENDPOINT + "/posting/place", requestBody).then(response => {
       if (response.status == 200) {

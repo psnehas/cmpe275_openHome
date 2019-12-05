@@ -8,7 +8,8 @@ class Login extends Component {
     super(props);
     this.state = {
       email: "",
-      password: ""
+      password: "",
+      role: ""
     };
 
     this.handleEmail = this.handleEmail.bind(this);
@@ -21,8 +22,6 @@ class Login extends Component {
     e.preventDefault();
     console.log(this.state);
 
-    window.localStorage.setItem("user", this.state.email);
-
     // axios.defaults.withCredentials = true;
 
     axios.get(API_ENDPOINT + "/user/landing").then(response => {
@@ -30,12 +29,10 @@ class Login extends Component {
       console.log("data  ", response.data);
       if (response.status === 200) {
         console.log(response.status);
-
-        if (response.data === "user") {
-          this.props.history.push("/home");
-        } else {
-          this.props.history.push("/landingpage");
-        }
+        console.log("role", response.data);
+        this.setState({
+          role: response.data
+        });
       }
       console.log(response);
     });
@@ -59,11 +56,8 @@ class Login extends Component {
 
     const requestBody = {
       userID: this.state.email,
-      password: this.state.password,
-      role: "user"
+      password: this.state.password
     };
-
-    window.localStorage.setItem("user", this.state.email);
 
     // axios.defaults.withCredentials = true;
 
@@ -73,11 +67,18 @@ class Login extends Component {
 
       if (response.status === 200) {
         console.log(response.status);
+        console.log("role", response.data);
 
-        if (response.data === "user") {
+        this.setState({
+          role: response.data
+        });
+
+        if (response.data == "user") {
+          window.localStorage.setItem("user", this.state.email);
           this.props.history.push("/home");
         } else {
-          this.props.history.push("/landingpage");
+          window.localStorage.setItem("host", this.state.email);
+          this.props.history.push("/ownerdashboard");
         }
       }
       console.log(response);
