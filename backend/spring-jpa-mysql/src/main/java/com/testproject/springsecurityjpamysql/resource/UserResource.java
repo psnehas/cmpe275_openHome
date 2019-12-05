@@ -46,7 +46,8 @@ public class UserResource {
 				
 		try {
 			UserProfile user = uService.getUserObject(userID);
-			return ResponseEntity.status(HttpStatus.OK).body("Google auth successful");			
+			
+			return ResponseEntity.status(HttpStatus.OK).header("Access-Control-Allow-Origin", "*").body("Google auth successful");			
 		}
 		catch(NoSuchElementException e) {
 			
@@ -111,7 +112,7 @@ public class UserResource {
 				user.getUserID().equals(userID)  &&
 				user.getRole().contentEquals(role) &&
 				user.getVerified() ? 
-					ResponseEntity.status(HttpStatus.OK).body("Login successful"): 
+					ResponseEntity.status(HttpStatus.OK).body(role): 
 						ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Login failed");
 								
 	}

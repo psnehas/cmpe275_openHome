@@ -2,10 +2,8 @@ package com.testproject.springsecurityjpamysql.service;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -109,7 +107,7 @@ public class SearchService {
 			}				
 		}
 		
-		p.setBooked(false);
+//		p.setBooked(false);
 		Example<Property> propExample = Example.of(p);				
 		List<Property> list =  postRepo.findAll(propExample);
 		
@@ -121,17 +119,18 @@ public class SearchService {
 	}
 
 
-	private List<Property> filterForFlags(List<Property> list, String text , Float priceLow , Float priceHigh, Date startDate, Date endDate) {
+	public List<Property> filterForFlags(List<Property> list, String text , Float priceLow , Float priceHigh, Date startDate, Date endDate) {
 	
 		if(list == null) {
 			Property p = new Property();
-			p.setBooked(false);
+//			p.setBooked(false);
 			Example<Property> propExample = Example.of(p);		
 			list =  postRepo.findAll(propExample);
 		}
 		
 		
 		for(Property p : new ArrayList<Property>(list)) {
+			
 			if(text!=null && 
 				!p.getDescription().toLowerCase().contains(text.toLowerCase()) && 
 				!p.getPropertyName().toLowerCase().contains(text.toLowerCase()) && 
@@ -145,12 +144,39 @@ public class SearchService {
 				( !(p.getRentWeekday() >= priceLow) ||
 				!(p.getRentWeekday() <= priceHigh) ) ) {
 				
+				
 				list.remove(p);
 				continue;
 			}	
 			
 			if(startDate != null) {
-				System.out.println("Handling startDate");
+				
+				System.out.println("Handling Dates");
+				
+				//check if property is booked for those dates
+				Booking b = new Booking();
+				b.setPropertyID(p.getPropertyID());
+				Example<Booking> bex = Example.of(b);
+				if(bookingRepo.findAll(bex) != null ) {
+					
+					List<Booking> bTempList = bookingRepo.findAll(bex);
+					for(Booking bTemp : bTempList)  {
+						
+						
+						
+						if( !(( bTemp.getStartDate().before(startDate) && 
+									bTemp.getEndDate().before(startDate) ) || 
+								( bTemp.getStartDate().after(endDate) && 
+										bTemp.getEndDate().after(endDate) ) )
+								) 
+						{						
+								list.remove(p);
+							continue;
+						}
+					}
+					
+				}
+				
 				Availability av = p.getAvailability();
 				System.out.println("Availability - "+av.getAlwaysAvailable());
 				if(av.getAlwaysAvailable())
@@ -224,9 +250,7 @@ public class SearchService {
 					}
 					
 					start = start.plusDays(1);
-										
-					
-					
+															
 				}
 			}
 		}
@@ -246,7 +270,7 @@ public class SearchService {
 	}
 
 
-	public ResponseEntity<String> checkIn(Integer propertyID, Float payment, String userID) {
+	public ResponseEntity<String> checkIn(Integer propertyID, Float payment, String userID, Date checkIn) {
 				
 		
 		//Get card number from UserProfile
@@ -274,6 +298,14 @@ public class SearchService {
 		Example<Booking> bookingExample = Example.of(booking);
 		Booking bookingObject = bookingRepo.findOne(bookingExample).get();
 		bookingObject.setPayment(payment);
+		
+		System.out.println("offset ="+checkIn.getTimezoneOffset());
+		
+		long offset = checkIn.getTimezoneOffset()*60*1000;
+		
+		checkIn.setTime(checkIn.getTime()-offset);
+				
+		bookingObject.setCheckInTime(checkIn);
 		bookingRepo.save(bookingObject);
 		
 		//Set checkedIn = true in property table
@@ -297,11 +329,11 @@ public class SearchService {
 				+"\nProperty name: "+prop.getPropertyName()
 				+"\nAddress : "+prop.getAddress().getStreet()+" "+prop.getAddress().getCity()+" "+prop.getAddress().getZip()
 				+"\nBooked until : "+bookingObject.getEndDate();
-		try {
-			sendEmail("OpenHome charges" , msgBody );
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+//		try {
+//			sendEmail("OpenHome charges" , msgBody );
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 		
 		return ResponseEntity.status(HttpStatus.OK).body("Payment initialized");		
 	}
@@ -317,6 +349,15 @@ public class SearchService {
 	         
 	        sender.send(message);
 	    }
+
+
+	public void removeBooking(Integer propertyID) {
+		
+		Property pTemp = new Property(); 
+		pTemp.setPropertyID(propertyID);
+		
+			
+	}
 	
 	
 	

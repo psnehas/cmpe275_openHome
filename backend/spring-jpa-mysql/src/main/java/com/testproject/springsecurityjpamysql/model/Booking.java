@@ -20,6 +20,9 @@ public class Booking {
 	Date endDate;
 	String ownerID;
 	String userID;
+	Float bookedrentWeekday;
+	Float bookedrentWeekend;
+	Date checkInTime;
 	
 	@Id
 	Float bookedPrice;
@@ -28,6 +31,45 @@ public class Booking {
 	public Booking() { 	}
 
 	
+		
+	public Float getBookedrentWeekday() {
+		return bookedrentWeekday;
+	}
+
+
+
+
+	public void setBookedrentWeekday(Float bookedrentWeekday) {
+		this.bookedrentWeekday = bookedrentWeekday;
+	}
+
+
+
+
+	public Float getBookedrentWeekend() {
+		return bookedrentWeekend;
+	}
+
+
+
+
+	public void setBookedrentWeekend(Float bookedrentWeekend) {
+		this.bookedrentWeekend = bookedrentWeekend;
+	}
+
+
+
+
+	public Date getCheckInTime() {
+		return checkInTime;
+	}
+
+	
+	public void setCheckInTime(Date checkInTime) {
+		this.checkInTime = checkInTime;
+	}
+
+
 	public Float getPayment() {
 		return payment;
 	}

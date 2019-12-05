@@ -1,17 +1,6 @@
 package com.testproject.springsecurityjpamysql.resource;
 
-import java.io.StringReader;
-import java.rmi.server.UID;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -24,15 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
 import com.testproject.springsecurityjpamysql.model.Address;
 import com.testproject.springsecurityjpamysql.model.Filter;
 import com.testproject.springsecurityjpamysql.model.Property;
-import com.testproject.springsecurityjpamysql.model.UserProfile;
-import com.testproject.springsecurityjpamysql.repository.AddressRepository;
 import com.testproject.springsecurityjpamysql.repository.PostingsRepository;
 import com.testproject.springsecurityjpamysql.service.SearchService;
-import com.testproject.springsecurityjpamysql.service.UserService;
 
 @RequestMapping("/posting")
 @CrossOrigin(origins = "*")
