@@ -1,6 +1,7 @@
 package com.testproject.springsecurityjpamysql.resource;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -8,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -78,5 +80,19 @@ public class PostingResource {
 		Property p = g.fromJson(g.toJson(newPropertyJSON), Property.class);					
 		searchService.addPosting(p);
 	}
+	
+	@PutMapping(value = "/place")
+	public void editPosting(@RequestBody Object oldPropertyJSON) {
+		
+		Gson g = new Gson();
+		Map map = g.fromJson(g.toJson(oldPropertyJSON), Map.class);	
+		Integer propertyID = Integer.parseInt(map.get("propertyID").toString());	
+		Property p = g.fromJson(g.toJson(oldPropertyJSON), Property.class);		
+		p.setPropertyID(propertyID);
+		searchService.addPosting(p);
+		
+	}
+	
+	
 
 }
