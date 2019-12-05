@@ -1,0 +1,143 @@
+.masthead {
+  height: 100vh;
+  min-height: 500px;
+  background-image: url("../../images/ocean.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.websitename {
+  color: transparent;
+  background: #28a745;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  background-clip: text;
+  text-shadow: 0px 3px 3px rgba(255, 255, 255, 0.5);
+}
+
+.homesearch {
+  top: 10.5vw;
+  left: 10.2vw;
+}
+
+.flex-container {
+  border-radius: 8px;
+  bottom: 5vw;
+  left: 1vw;
+  height: 1vw;
+  width: 42.5vw;
+  display: flex;
+  background: rgba(0, 0, 0, 0.192);
+  align-items: center;
+}
+
+.flex-container2 {
+  width: 100%;
+  padding-bottom: 4vw;
+  top: 6.3vw;
+  right: 14.2vw;
+}
+
+.flex-container > div {
+  padding: 0.3vw;
+  font-size: 1vw;
+}
+
+.searchfields {
+  border-radius: 8px;
+  height: 3.8vw;
+  line-height: 1vw;
+  color: rgb(99, 95, 95);
+}
+.searchfields:focus {
+  border-bottom: #0067db 0.3vw solid;
+  transition: width 0.5s ease;
+  outline: none;
+}
+
+input::placeholder {
+  font-size: 18px;
+  line-height: 70px;
+}
+
+.largesearch {
+  width: 23vw;
+  font-size: 1.2vw;
+}
+
+.smallsearch {
+  width: 11.5vw;
+  font-size: 1.2vw;
+}
+
+.homesearchbutton {
+  background-color: #0067db;
+  font-size: 1.2vw;
+  border: none;
+  border-radius: 40px;
+  color: white;
+  line-height: 1vw;
+}
+.srch {
+  padding-top: 1.5vw;
+  padding-left: 3.5vw;
+  font-size: 1.2vw;
+}
+
+.srch {
+  color: white;
+  text-decoration: none;
+}
+
+.homesearchbutton:hover {
+  background-color: #1466c4;
+}
+
+/* EXPERIMENT SEARCH*/
+
+/*search box css start here*/
+.search-sec {
+  padding: 2rem;
+  margin-top: 15%;
+}
+.search-slt {
+  display: block;
+  width: 100%;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #55595c;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  height: calc(3rem + 2px) !important;
+  border-radius: 0;
+}
+.wrn-btn {
+  width: 100%;
+  font-size: 16px;
+  font-weight: 400;
+  text-transform: capitalize;
+  height: calc(3rem + 2px) !important;
+  border-radius: 0;
+}
+@media (min-width: 992px) {
+  .search-sec {
+    position: relative;
+    top: -114px;
+    background: rgba(26, 70, 104, 0.51);
+  }
+}
+
+@media (max-width: 992px) {
+  .search-sec {
+    background: #1a4668;
+  }
+}
+
+.foot {
+  background-image: url("../../images/footer.png");
+  background-size: cover;
+  height: 650px;
+  width: 1200px;
+}
