@@ -27,7 +27,7 @@ public class BookingService {
 	@Autowired
     JavaMailSender sender;
 	
-	public void createBooking(Booking newBooking) {
+	public void createBooking(Booking newBooking){
 		bookingRepo.save(newBooking);
 		
 		Property p = new Property();
@@ -35,7 +35,15 @@ public class BookingService {
 		Example<Property> propExample = Example.of(p);
 		Property newProp = postrepo.findOne(propExample).get();
 		newProp.setBooked(true);
+		try {
+			sendEmail(newBooking.getUserID() ,"New reservation", "A new booking has been created");
+			sendEmail(newBooking.getOwnerID() ,"New reservation", "A new booking has been created");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		postrepo.save(newProp);
+		
 		
 	}
 

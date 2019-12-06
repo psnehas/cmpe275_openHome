@@ -3,7 +3,7 @@ import axios from "axios";
 import { API_ENDPOINT } from "../../constants/routes";
 //import Map from "../Common/Maps/Map";
 import { Map, GoogleApiWrapper } from "google-maps-react";
-import cardimage from "../../images/usflag.png";
+import cardimage from "../../images/demo1.jpg";
 import Navbar from "../Common/Navbar/Navbar";
 import moment from "moment";
 import DatePicker from "react-datepicker";

@@ -14,11 +14,13 @@ import PropertyDetailsUpdated from "./Property/PropertyDetailsUpdated";
 import PostPropertyUpdated from "./PostProperty/PostPropertyUpdated";
 import PostPropertyLatest from "./PostProperty/PostPropertyLatest";
 import Clock from "./Common/Clock/Clock";
+import NavbarUser from "./Common/NavbarUser/NavbarUser";
 class Main extends Component {
   render() {
     return (
       <div>
         <Route path="/signup" component={SignUp} />
+        <Route path="/navbaruser" component={NavbarUser} />
         <Route path="/clock" component={Clock} />
         <Route path="/login" component={Login} />
         <Route path="/propertysearch" component={PropertySearch} />

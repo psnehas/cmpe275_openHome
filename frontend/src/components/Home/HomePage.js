@@ -7,6 +7,7 @@ import moment from "moment";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Link } from "react-router-dom";
+import NavbarOwner from "../Common/NavbarOwner/NavbarOwner";
 class HomePage extends Component {
   constructor(props) {
     super(props);
@@ -20,11 +21,16 @@ class HomePage extends Component {
       openhomeClock: ""
     };
 
+    this.handleLogOut = this.handleLogOut.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.handlestartDate = this.handlestartDate.bind(this);
     this.handleendDate = this.handleendDate.bind(this);
     this.handleCity = this.handleCity.bind(this);
   }
+  handleLogOut = e => {
+    window.localStorage.clear();
+    window.alert("Logged out successfully");
+  };
 
   handleCity = e => {
     console.log("E", e);
@@ -179,8 +185,12 @@ class HomePage extends Component {
                   </Link>
                 </li>
                 <li class="nav-item mr-2">
-                  <Link className="nav-link" to="/home">
-                    Log out
+                  <Link
+                    className="nav-link"
+                    to="/login"
+                    onClick={this.handleLogOut}
+                  >
+                    Log Out
                   </Link>
                 </li>
                 <li class="nav-item">

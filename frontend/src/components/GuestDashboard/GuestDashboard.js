@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { API_ENDPOINT } from "../../constants/routes";
 
-import cardimage from "../../images/usflag.png";
+import cardimage from "../../images/demo1.jpg";
 import Navbar from "../Common/Navbar/Navbar";
 import moment from "moment";
 import DatePicker from "react-datepicker";

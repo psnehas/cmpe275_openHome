@@ -31,7 +31,7 @@ class PropertyDetails extends Component {
     console.log(property);
 
     this.state = {
-      email: "john@gmail.com",
+      email: window.localStorage.getItem("user"),
       city: city,
       startDate: startDate,
       endDate: endDate,
@@ -181,21 +181,21 @@ class PropertyDetails extends Component {
                       <div class="carousel-item active">
                         <img
                           class="d-block w-100"
-                          src={test1}
+                          src={image1}
                           alt="First slide"
                         />
                       </div>
                       <div class="carousel-item">
                         <img
                           class="d-block w-100"
-                          src={test2}
+                          src={image2}
                           alt="Second slide"
                         />
                       </div>
                       <div class="carousel-item">
                         <img
                           class="d-block w-100"
-                          src={test3}
+                          src={image3}
                           alt="Third slide"
                         />
                       </div>

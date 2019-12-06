@@ -78,7 +78,7 @@ class Login extends Component {
           this.props.history.push("/home");
         } else {
           window.localStorage.setItem("host", this.state.email);
-          this.props.history.push("/ownerdashboard");
+          this.props.history.push("/postproperty");
         }
       }
       console.log(response);

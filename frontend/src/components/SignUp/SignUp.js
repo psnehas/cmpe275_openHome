@@ -53,6 +53,7 @@ class SignUp extends Component {
     };
     axios.post(API_ENDPOINT + "/user/register", requestBody).then(response => {
       if (response.status == 200) {
+        window.alert("Signed Up Successfully!");
         this.setState({
           signupflag: true
         });

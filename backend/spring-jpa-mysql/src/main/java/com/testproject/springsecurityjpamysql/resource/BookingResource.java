@@ -44,7 +44,7 @@ public class BookingResource {
 
 	
 	@PostMapping(value = "/new" , consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void createNewBooking(@RequestBody Object bookingJSON) {
+	public void createNewBooking(@RequestBody Object bookingJSON)  {
 		
 		Gson g = new Gson();
 		Booking newBooking = g.fromJson(g.toJson(bookingJSON), Booking.class);

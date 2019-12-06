@@ -10,13 +10,13 @@ import "./PostProperty.css";
 import $ from "jquery";
 import usflag from "../../images/usflag.png";
 import { storage } from "./../../firebase/index";
-
+import NavbarOwner from "../Common/NavbarOwner/NavbarOwner";
 class PostProperty extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      email: window.localStorage.getItem("user"),
+      email: window.localStorage.getItem("host"),
       propertyName: "",
       propertyType: "",
       sharingType: "Entire Room",
@@ -192,7 +192,7 @@ class PostProperty extends Component {
       privateBathAvailable: this.state.privateBathAvailable,
       privateShowerAvailable: this.state.privateShowerAvailable,
 
-      availablity: {
+      availability: {
         alwaysAvailable: this.state.alwaysAvailable,
         mon: this.state.mon,
         tue: this.state.tue,
@@ -421,7 +421,7 @@ class PostProperty extends Component {
           <div class="container-fluid">
             <div class="row border border-primary">
               {" "}
-              <Navbar />
+              <NavbarOwner />
             </div>
             <div class="row border border-primary mt-3"> HELLO </div>
             <div class="row" style={{ "margin-top": "8%" }}>
