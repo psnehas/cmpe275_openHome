@@ -85,6 +85,8 @@ class SignUp extends Component {
       console.log("response -----", response);
 
       if (response.status == 200) {
+        window.alert("Sign Up Successful");
+
         this.setState({
           signupflag: true
         });

@@ -13,12 +13,13 @@ import LandingPage from "./LandingPage/LandingPage";
 import PropertyDetailsUpdated from "./Property/PropertyDetailsUpdated";
 import PostPropertyUpdated from "./PostProperty/PostPropertyUpdated";
 import PostPropertyLatest from "./PostProperty/PostPropertyLatest";
-
+import Clock from "./Common/Clock/Clock";
 class Main extends Component {
   render() {
     return (
       <div>
         <Route path="/signup" component={SignUp} />
+        <Route path="/clock" component={Clock} />
         <Route path="/login" component={Login} />
         <Route path="/propertysearch" component={PropertySearch} />
         <Route path="/home" component={HomePage} />

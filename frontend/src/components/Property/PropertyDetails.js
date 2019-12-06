@@ -476,7 +476,9 @@ class PropertyDetails extends Component {
                           placeholder="Start Date"
                         />
                       </div>
-
+                    </div>
+                    <br />
+                    <div class="row">
                       <div class="col-lg-6 col-md-3 col-sm-12 p-0">
                         <input
                           type="date"
