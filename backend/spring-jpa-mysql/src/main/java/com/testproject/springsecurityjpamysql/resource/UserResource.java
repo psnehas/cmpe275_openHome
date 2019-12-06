@@ -94,7 +94,7 @@ public class UserResource {
 		
 		uService.verifyUser(userID);
 				
-		return "Activation successful";
+		return "<h1>Activation successful<h1>";
 	}
 	
 	@PostMapping(value = "login" , consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -104,7 +104,7 @@ public class UserResource {
 		Map map = g.fromJson(g.toJson(userCred), Map.class);	
 		String userID = (String) map.get("userID");
 		String password = (String) map.get("password");
-		//String role = (String)map.get("role");
+		String role = (String)map.get("role");
 		
 		UserProfile user = uService.getUserObject(userID);
 		

@@ -2,19 +2,20 @@ package com.testproject.springsecurityjpamysql.resource;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
+import javax.mail.internet.MimeMessage;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,7 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.Gson;
 import com.testproject.springsecurityjpamysql.model.Booking;
 import com.testproject.springsecurityjpamysql.model.Property;
-import com.testproject.springsecurityjpamysql.repository.BookingRepository;
 import com.testproject.springsecurityjpamysql.service.BookingService;
 import com.testproject.springsecurityjpamysql.service.SearchService;
 
@@ -40,8 +40,7 @@ public class BookingResource {
 	SearchService searchService;
 	
 	@Autowired
-	ClockResource myClock;
-
+	JavaMailSender sender;
 
 	
 	@PostMapping(value = "/new" , consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -110,7 +109,11 @@ public class BookingResource {
 			//cancel reservation
 			try {				
 				bookingService.removeBooking(propertyID, startDate, endDate, charge);
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No Show - Booking has been cancelled. Charge "+charge);
+				
+				sendEmail(bObj.getUserID(), "No Show", "Booking has been cancelled. Charge "+charge);
+				
+				return ResponseEntity.ok().body("No Show - Booking has been cancelled. Charge "+charge);
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -138,7 +141,7 @@ public class BookingResource {
 	}
 	
 	
-	@PutMapping(value = "/user/checkout" , consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(value = "/checkout" , consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> checkout(@RequestBody Object checkOutObject) throws Exception {
 		//create JSON map
 		Gson g = new Gson();
@@ -147,25 +150,48 @@ public class BookingResource {
 		
 		Integer propertyID =  Integer.parseInt(map.get("propertyID").toString());	
 		Date checkOut = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(map.get("checkOutTime").toString());
+		Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(map.get("startDate").toString());
 		Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse(map.get("endDate").toString());
+		Booking bObj = bookingService.getBookingObject(propertyID,startDate);
 		
 		Date validCheckOutTime = endDate; 
 		endDate.setHours(11);
 		
-		if(checkOut.before(validCheckOutTime)) {
-			
-			Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(map.get("startDate").toString());
-			Float charge = 0f;
+		String tempDate = jumpDayCalendar(map.get("endDate").toString() , -1);
+		Date earlyCheckOut = new SimpleDateFormat("yyyy-MM-dd").parse(tempDate);
+		Float charge = 0f;
+		
+		if(checkOut.after(endDate)){
 			bookingService.removeBooking(propertyID, startDate, endDate, charge);
+			
+			sendEmail(bObj.getUserID(), "Check Out", "You have already been checked out on "+endDate);
+			
+			return ResponseEntity.ok().body("You have already been checked out on "+endDate);
+		}
+		else if(checkOut.before(validCheckOutTime) && checkOut.after(earlyCheckOut)) {
+			bookingService.removeBooking(propertyID, startDate, endDate, charge);	
+			
+			sendEmail(bObj.getUserID(), "Check Out", "You have been successfully checked out on");
 			
 			return ResponseEntity.ok().body("You have been checked out.");
 			
 		}
 		else {
-			//cancellation logic
+			System.out.println("Early check out");
+			int daysRemaining = (int) ((endDate.getTime() - checkOut.getTime())/1000/60/60/24);
+			
+			charge += daysRemaining*bObj.getBookedrentWeekday()*0.15f;
+			
+			bookingService.removeBooking(propertyID, startDate, endDate, charge);
+			
+			sendEmail(bObj.getUserID(), "Early Check Out", "You have been checked out. Extra charges = $"+charge+" for "+daysRemaining+" days");
+			
+			return ResponseEntity.ok().body("You have been checked out. Extra charges = $"+charge+" for "+daysRemaining+" days");
+						
 		}
+		
 				
-		return null;
+		//return null;
 		
 	}
 	
@@ -214,7 +240,90 @@ public class BookingResource {
 		
 		bookingService.removeBooking(propertyID, startDate, endDate, charge);
 		return ResponseEntity.ok().body("Final cancellation charges = "+charge); 	
-//		
-		
+				
 	}	
+	
+	
+	@DeleteMapping(value = "owner/cancel" , consumes = MediaType.APPLICATION_JSON_VALUE ) 
+	public ResponseEntity<String> cancelBookingOwner(@RequestBody Object propObjectJSON) throws Exception {
+		
+		Gson g = new Gson();
+		Map map = g.fromJson(g.toJson(propObjectJSON), Map.class);	
+		Integer propertyID = Integer.parseInt(map.get("propertyID").toString());
+		Date cancelTime = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(map.get("cancelTime").toString());
+		Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(map.get("startDate").toString());
+		Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse(map.get("endDate").toString());
+		Booking bookingObj = bookingService.getBookingObject(propertyID, startDate);
+		String tempDate = jumpDayCalendar(map.get("startDate").toString() , -7);
+		Date validCancelDate = new SimpleDateFormat("yyyy-MM-dd").parse(tempDate);
+		Float penalty = 0f;
+		
+		Property propObject = searchService.getProperty(propertyID);
+		
+		Date validStartDate = new SimpleDateFormat("yyyy-MM-dd").parse(map.get("startDate").toString());		
+		
+		if(cancelTime.before(validCancelDate)) {						
+			return ResponseEntity.ok().body("Booking has been cancelled. No penalty"); 
+		}
+		else if(cancelTime.after(validCancelDate) && cancelTime.before(startDate)) {
+			
+			Float parkingFee = 0f;
+			
+			if(propObject.getParking().isAvailable() && propObject.getParking().isPaid() ) 
+				penalty += propObject.getParking().getDailyFee();
+			
+			
+			if(startDate.getDay() == 0 && startDate.getDay() == 6) 
+				penalty += bookingObj.getBookedrentWeekend() * 0.15f;
+			
+			else 
+				penalty += bookingObj.getBookedrentWeekday() * 0.15f;	
+			
+		}
+		else if(cancelTime.after(startDate)) {
+			int daysRemaining = (int) ((endDate.getTime() - cancelTime.getTime())/1000/60/60/24);
+			System.out.println("Days remaining - "+daysRemaining);
+			//check if cancelTime is before or after 3 PM
+			System.out.println("Cancel time - "+cancelTime.getHours());
+			if(cancelTime.getHours() < 15 ) {
+				
+				penalty += daysRemaining*bookingObj.getBookedrentWeekday()*0.15f;
+				System.out.println("Cancel time is before 3 PM. Penalty  - "+penalty);
+			}
+			else if(cancelTime.getHours() >= 15) {
+				if(daysRemaining > 2) 
+					penalty += (daysRemaining-1)*bookingObj.getBookedrentWeekday()*0.15f;
+				else 
+					penalty += bookingObj.getBookedrentWeekday()*0.15f;
+				
+				System.out.println("Cancel time is after 3 PM. Penalty  - "+penalty);
+			}
+			
+		}
+			
+		return ResponseEntity.ok().body("Booking has been cancelled. Penalty = "+penalty);
+			
+	}
+	
+	
+	
+	
+	private void sendEmail(String email , String subject, String messageText) throws Exception{
+        MimeMessage message = sender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+         
+        helper.setTo(email);
+        helper.setText(messageText);
+        helper.setSubject(subject);
+         
+        sender.send(message);
+    }
+	
+	
+	
+	
+	
+	
+	
+	
 }

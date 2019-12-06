@@ -22,8 +22,7 @@ public class Availability {
 	Boolean fri;
 	Boolean sat;
 	Boolean sun;
-	
-	
+		
 	public Integer getAvailabilityID() {
 		return availabilityID;
 	}

@@ -101,9 +101,7 @@ public class SearchService {
 					case "endDate" :
 						endDate =  (Date) f.get(filter);
 						break;	
-					}
-				
-				
+					}				
 			}				
 		}
 		
@@ -127,7 +125,7 @@ public class SearchService {
 			Example<Property> propExample = Example.of(p);		
 			list =  postRepo.findAll(propExample);
 		}
-		
+			
 		
 		for(Property p : new ArrayList<Property>(list)) {
 			
@@ -161,9 +159,7 @@ public class SearchService {
 					
 					List<Booking> bTempList = bookingRepo.findAll(bex);
 					for(Booking bTemp : bTempList)  {
-						
-						
-						
+											
 						if( !(( bTemp.getStartDate().before(startDate) && 
 									bTemp.getEndDate().before(startDate) ) || 
 								( bTemp.getStartDate().after(endDate) && 
@@ -263,6 +259,15 @@ public class SearchService {
 	public void addPosting(Property p) {		
 		postRepo.save(p);		
 	}
+	
+	public Property getProperty(Integer propertyID) {
+		
+		Property p = new Property(); 
+		p.setPropertyID(propertyID);
+		Example<Property> pExample = Example.of(p);
+		return postRepo.findOne(pExample).get();
+		
+	}
 
 
 	public List<Property> findAllProps() {
@@ -323,17 +328,19 @@ public class SearchService {
 //		Booking bookingObject = bookingRepo.findOne(booking).get();
 		
 		//Send notification 
-		String msgBody = "Hello "+userObject.getFirstName()+" "+userObject.getLastName()
+		String msgBody = "Hello "+userObject.getFirstName()+" "+userObject.getLastName()+""
+				+"\nYou have successfully checked in."
 				+"\nA transaction of $"+payment+" has been charged on your card"
 				+"\nBooking details:"
 				+"\nProperty name: "+prop.getPropertyName()
 				+"\nAddress : "+prop.getAddress().getStreet()+" "+prop.getAddress().getCity()+" "+prop.getAddress().getZip()
-				+"\nBooked until : "+bookingObject.getEndDate();
-//		try {
-//			sendEmail("OpenHome charges" , msgBody );
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
+				+"\nBooked until : "+bookingObject.getEndDate()+""
+				+"\n\nThanks and regards,\nOpenHome";
+		try {
+			sendEmail("OpenHome charges" , msgBody );
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		return ResponseEntity.status(HttpStatus.OK).body("Payment initialized");		
 	}

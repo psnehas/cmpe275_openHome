@@ -39,6 +39,7 @@ public class BookingService {
 		
 	}
 
+	
 	public String getUser(int propertyID) {
 		Booking b = new Booking();
 		b.setPropertyID(propertyID);
@@ -59,7 +60,7 @@ public class BookingService {
 		//send email of payment						
 		try {
 			bookingRepo.delete(bookingObject);
-			sendEmail(bookingObject.getUserID(), "Booking has been cancelled", "Payment charged - $"+payment);
+//			sendEmail(bookingObject.getUserID(), "Booking has been cancelled", "Payment charged - $"+payment);
 		}
 		catch(Exception e) {
 			throw e;
@@ -71,7 +72,7 @@ public class BookingService {
         MimeMessage message = sender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
          
-        helper.setTo("nikhil.limaye@sjsu.edu");
+        helper.setTo(email);
         helper.setText(messageText);
         helper.setSubject(subject);
          
