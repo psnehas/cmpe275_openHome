@@ -44,7 +44,7 @@ public class BookingResource {
 
 	
 	@PostMapping(value = "/new" , consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void createNewBooking(@RequestBody Object bookingJSON)  {
+	public void createNewBooking(@RequestBody Object bookingJSON) {
 		
 		Gson g = new Gson();
 		Booking newBooking = g.fromJson(g.toJson(bookingJSON), Booking.class);
@@ -162,14 +162,14 @@ public class BookingResource {
 		Float charge = 0f;
 		
 		if(checkOut.after(endDate)){
-			bookingService.removeBooking(propertyID, startDate, endDate, charge);
+			bookingService.checkOut(propertyID, startDate, endDate, charge, checkOut);
 			
 			sendEmail(bObj.getUserID(), "Check Out", "You have already been checked out on "+endDate);
 			
 			return ResponseEntity.ok().body("You have already been checked out on "+endDate);
 		}
 		else if(checkOut.before(validCheckOutTime) && checkOut.after(earlyCheckOut)) {
-			bookingService.removeBooking(propertyID, startDate, endDate, charge);	
+			bookingService.checkOut(propertyID, startDate, endDate, charge, checkOut);	
 			
 			sendEmail(bObj.getUserID(), "Check Out", "You have been successfully checked out on");
 			

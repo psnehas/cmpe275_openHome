@@ -1,6 +1,7 @@
 package com.testproject.springsecurityjpamysql.service;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.mail.internet.MimeMessage;
 
@@ -8,12 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.testproject.springsecurityjpamysql.model.Booking;
+import com.testproject.springsecurityjpamysql.model.MyClock;
 import com.testproject.springsecurityjpamysql.model.Property;
 import com.testproject.springsecurityjpamysql.repository.BookingRepository;
 import com.testproject.springsecurityjpamysql.repository.PostingsRepository;
+import com.testproject.springsecurityjpamysql.resource.ClockResource;
 
 @Service
 public class BookingService {
@@ -27,7 +31,10 @@ public class BookingService {
 	@Autowired
     JavaMailSender sender;
 	
-	public void createBooking(Booking newBooking){
+	@Autowired
+	MyClock myClock;
+	
+	public void createBooking(Booking newBooking) {
 		bookingRepo.save(newBooking);
 		
 		Property p = new Property();
@@ -35,15 +42,7 @@ public class BookingService {
 		Example<Property> propExample = Example.of(p);
 		Property newProp = postrepo.findOne(propExample).get();
 		newProp.setBooked(true);
-		try {
-			sendEmail(newBooking.getUserID() ,"New reservation", "A new booking has been created");
-			sendEmail(newBooking.getOwnerID() ,"New reservation", "A new booking has been created");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		postrepo.save(newProp);
-		
 		
 	}
 
@@ -68,12 +67,38 @@ public class BookingService {
 		//send email of payment						
 		try {
 			bookingRepo.delete(bookingObject);
-//			sendEmail(bookingObject.getUserID(), "Booking has been cancelled", "Payment charged - $"+payment);
-		}
+			}
 		catch(Exception e) {
 			throw e;
 		}			
 	}
+	
+	
+	public void checkOut(Integer propertyID, Date startDate, Date endDate, Float payment,Date checkOutTime) throws Exception {
+		
+		Booking booking = new Booking();
+		booking.setPropertyID(propertyID);
+//		booking.setStartDate(startDate);
+//		booking.setEndDate(endDate);	
+		Example<Booking> bookingExample = Example.of(booking);
+		Booking bookingObject = bookingRepo.findOne(bookingExample).get();
+		
+		//send email of payment						
+		try {
+			bookingObject.setCheckedOut(true);
+			long offset = checkOutTime.getTimezoneOffset()*60*1000;			
+			checkOutTime.setTime(checkOutTime.getTime()-offset);
+			bookingObject.setCheckOutTime(checkOutTime);
+			bookingRepo.save(bookingObject);
+			}
+		catch(Exception e) {
+			throw e;
+		}			
+	}	
+	
+	
+	
+	
 
 	
 	private void sendEmail(String email , String subject, String messageText) throws Exception{
@@ -96,6 +121,41 @@ public class BookingService {
 		Example<Booking> bExample = Example.of(bTemp);
 		return bookingRepo.findOne(bExample).get();
 
+	}
+
+
+	@Scheduled(fixedDelay = 10000)
+	public void adjustBookings() {
+		
+		Date d = Date.from(myClock.instant());
+		
+		Booking bTemp = new Booking();
+		bTemp.setCheckedOut(false);
+		Example<Booking> bExample = Example.of(bTemp);
+		List<Booking> allBookings = bookingRepo.findAll(bExample);
+		
+		if(allBookings.isEmpty()) {
+			System.out.println("No adjustment required");
+			return;
+		}
+		
+		for(Booking b : allBookings) {
+			if(d.getTime() - b.getEndDate().getTime() > 0) {
+				try {
+					System.out.println("Current date time = "+d);
+					Date checkOutTime = b.getEndDate();
+					checkOutTime.setHours(11);
+					checkOut(b.getPropertyID(), b.getStartDate(), b.getEndDate(), b.getBookedPrice() , checkOutTime);
+					sendEmail(b.getUserID(), "Automatic check out", "You have been automatically checked out on "+b.getEndDate()+" for your booking at ID - "+b.getPropertyID());
+					System.out.println("Required adjustment - mail sent");
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		
+		
 	}
 
 	

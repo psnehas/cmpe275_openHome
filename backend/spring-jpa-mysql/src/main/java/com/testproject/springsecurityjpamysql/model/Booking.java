@@ -14,8 +14,10 @@ import javax.persistence.ManyToOne;
 public class Booking {
 
 	
+	@Id
+	Float bookedPrice;
 	Integer propertyID;		
-	
+	Float payment;
 	Date startDate;	
 	Date endDate;
 	String ownerID;
@@ -23,10 +25,35 @@ public class Booking {
 	Float bookedrentWeekday;
 	Float bookedrentWeekend;
 	Date checkInTime;
+	Date checkOutTime;
+	Boolean checkedOut = false;
+
+
 	
-	@Id
-	Float bookedPrice;
-	Float payment;
+	
+	public Date getCheckOutTime() {
+		return checkOutTime;
+	}
+
+
+
+	public void setCheckOutTime(Date checkOutTime) {
+		this.checkOutTime = checkOutTime;
+	}
+
+
+
+	public Boolean getCheckedOut() {
+		return checkedOut;
+	}
+
+
+
+	public void setCheckedOut(Boolean checkedOut) {
+		this.checkedOut = checkedOut;
+	}
+
+	
 	
 	public Booking() { 	}
 

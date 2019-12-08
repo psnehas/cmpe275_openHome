@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 import com.testproject.springsecurityjpamysql.model.MyClock;
+import com.testproject.springsecurityjpamysql.service.BookingService;
 
 @RequestMapping("/clock")
 @CrossOrigin(origins = "*")
@@ -24,6 +26,9 @@ public class ClockResource {
 	
 	@Autowired
 	MyClock clock;
+	
+	@Autowired
+	BookingService bookingService;
 	
 	@SuppressWarnings("deprecation")
 	@PostMapping(value = "/jump")
@@ -38,19 +43,23 @@ public class ClockResource {
 		System.out.println(dateString+" "+hours+":"+minutes);
 		
 		Date d = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(dateString+" "+hours+":"+minutes);
-		
-				
+						
 		clock.jumpTo(d , hours , minutes);
+				
+		bookingService.adjustBookings();
+				
 		return clock.instant();
 		
 	}
 	
 	@GetMapping(value = "/current")
 	public String getCurrent() {
+		
 		return clock.getTime();
 	}
+		
 	
-	
+
 	
 	
 	

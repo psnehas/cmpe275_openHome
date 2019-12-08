@@ -256,13 +256,7 @@ public class SearchService {
 }
 
 
-	public void addPosting(Property p) {	
-		try {
-			sendEmail(p.getUser().getUserID() , "New property posted", "Thank you for posting a place with openhome");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void addPosting(Property p) {		
 		postRepo.save(p);		
 	}
 	
@@ -343,7 +337,7 @@ public class SearchService {
 				+"\nBooked until : "+bookingObject.getEndDate()+""
 				+"\n\nThanks and regards,\nOpenHome";
 		try {
-			sendEmail(p.getUser().getUserID(),"OpenHome charges" , msgBody );
+			sendEmail(bookingObject.getUserID() , "OpenHome charges" , msgBody );
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -352,7 +346,7 @@ public class SearchService {
 	}
 	
 	
-	  private void sendEmail(String email, String subject, String messageText) throws Exception{
+	  private void sendEmail(String email , String subject, String messageText) throws Exception{
 	        MimeMessage message = sender.createMimeMessage();
 	        MimeMessageHelper helper = new MimeMessageHelper(message);
 	         
