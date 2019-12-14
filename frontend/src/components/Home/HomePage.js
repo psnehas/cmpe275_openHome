@@ -252,7 +252,7 @@ class HomePage extends Component {
                                 onChange={this.handlestartDate}
                                 id="startDate"
                                 value={this.state.startDate}
-                                minDate={moment()}
+                                minDate={new Date()}
                               />
                             </div>
                             <div class="col-lg-2 col-md-3 col-sm-12 p-0">
