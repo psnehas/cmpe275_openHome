@@ -116,9 +116,9 @@ public class BookingResource {
 				
 			} catch (Exception e) {
 				e.printStackTrace();
-			}
-						
+			}						
 		}	
+		
 		
 		//Valid checkin
 		
@@ -182,17 +182,15 @@ public class BookingResource {
 			
 			charge += daysRemaining*bObj.getBookedrentWeekday()*0.15f;
 			
-			bookingService.removeBooking(propertyID, startDate, endDate, charge);
+			bookingService.checkOut(propertyID, startDate, endDate, charge, checkOut);
+//			bookingService.removeBooking(propertyID, startDate, endDate, charge);
 			
 			sendEmail(bObj.getUserID(), "Early Check Out", "You have been checked out. Extra charges = $"+charge+" for "+daysRemaining+" days");
 			
 			return ResponseEntity.ok().body("You have been checked out. Extra charges = $"+charge+" for "+daysRemaining+" days");
 						
 		}
-		
-				
-		//return null;
-		
+
 	}
 	
 	

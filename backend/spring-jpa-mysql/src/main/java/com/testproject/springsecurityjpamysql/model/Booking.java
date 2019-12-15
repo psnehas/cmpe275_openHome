@@ -24,9 +24,19 @@ public class Booking {
 	String userID;
 	Float bookedrentWeekday;
 	Float bookedrentWeekend;
+
 	Date checkInTime;
 	Date checkOutTime;
 	Boolean checkedOut = false;
+	
+	
+	@Override
+	public String toString() {
+		return "\nBooking details : \nTotal payment = $" + bookedPrice + ", \nProperty number=" + propertyID + "\nStart date=" + startDate
+				+ "\nEnd Date=" + endDate + "\nOwner email =" + ownerID + "\nCustomer email =" + userID + "\nWeekday Rent = $"
+				+ bookedrentWeekday + "\nWeekend rent = $" + bookedrentWeekend;
+	}
+
 
 
 	

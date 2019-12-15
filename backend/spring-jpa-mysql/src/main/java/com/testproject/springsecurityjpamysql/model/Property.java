@@ -55,7 +55,42 @@ public class Property {
 	Boolean booked;
 	Boolean checkedIn;
 	Boolean internetAvailable;
+
+	Double currentRating; 
+	Integer ratingCount;
+	Double averageRating;
+			
 	
+	public Double getAverageRating() {
+		return averageRating;
+	}
+
+
+	public void setAverageRating(Double averageRating) {
+		this.averageRating = averageRating;
+	}
+
+
+	public Double getCurrentRating() {
+		return currentRating;
+	}
+
+
+	public void setCurrentRating(Double currentRating) {
+		this.currentRating = currentRating;
+	}
+
+
+	public Integer getRatingCount() {
+		return ratingCount;
+	}
+
+
+	public void setRatingCount(Integer ratingCount) {
+		this.ratingCount = ratingCount;
+	}
+
+
 	
 	public Property() { }
 		

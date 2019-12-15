@@ -44,6 +44,21 @@ public class BookingService {
 		newProp.setBooked(true);
 		postrepo.save(newProp);
 		
+		try {
+			sendEmail(newBooking.getUserID(), "OpenHome : New Booking", "\nOpenHome booking details - "+
+			"\nProperty details - "+newProp.getAddress().toString() +
+			newBooking.toString()+" \n\n Enjoy your stay. \nOpenHome team");
+			
+			sendEmail(newBooking.getOwnerID(), "OpenHome : New Booking", "\nOpenHome booking details - "+
+					"\nProperty details - "+newProp.getAddress().toString() +
+					newBooking.toString());
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 	}
 
 	
@@ -96,11 +111,7 @@ public class BookingService {
 		}			
 	}	
 	
-	
-	
-	
-
-	
+		
 	private void sendEmail(String email , String subject, String messageText) throws Exception{
         MimeMessage message = sender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
@@ -135,7 +146,6 @@ public class BookingService {
 		List<Booking> allBookings = bookingRepo.findAll(bExample);
 		
 		if(allBookings.isEmpty()) {
-			System.out.println("No adjustment required");
 			return;
 		}
 		
@@ -148,7 +158,8 @@ public class BookingService {
 					checkOut(b.getPropertyID(), b.getStartDate(), b.getEndDate(), b.getBookedPrice() , checkOutTime);
 					sendEmail(b.getUserID(), "Automatic check out", "You have been automatically checked out on "+b.getEndDate()+" for your booking at ID - "+b.getPropertyID());
 					System.out.println("Required adjustment - mail sent");
-				} catch (Exception e) {
+				} 
+				catch (Exception e) {
 					e.printStackTrace();
 				}
 			}

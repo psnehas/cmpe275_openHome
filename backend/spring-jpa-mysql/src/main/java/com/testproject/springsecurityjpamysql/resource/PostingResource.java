@@ -6,8 +6,10 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -77,8 +79,9 @@ public class PostingResource {
 	public void addPosting(@RequestBody Object newPropertyJSON) {
 		
 		Gson g = new Gson();				
-		Property p = g.fromJson(g.toJson(newPropertyJSON), Property.class);					
+		Property p = g.fromJson(g.toJson(newPropertyJSON), Property.class);	
 		searchService.addPosting(p);
+
 	}
 	
 	@PutMapping(value = "/place")
@@ -91,6 +94,20 @@ public class PostingResource {
 		p.setPropertyID(propertyID);
 		searchService.addPosting(p);
 		
+	}
+	
+	/*
+	 * POST A NEW RATING
+	 */
+	@PostMapping(value = "/rating")
+	public ResponseEntity<Object> postNewRating(@RequestBody Object newRatingJSON) {
+		
+		Gson g = new Gson();
+		Map map = g.fromJson(g.toJson(newRatingJSON), Map.class);	
+		Integer propertyID = Integer.parseInt(map.get("propertyID").toString());
+		Double rating = Double.parseDouble(map.get("rating").toString());
+		
+		return searchService.addRating(propertyID , rating);
 	}
 	
 	

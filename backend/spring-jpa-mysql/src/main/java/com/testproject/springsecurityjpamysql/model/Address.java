@@ -24,6 +24,15 @@ public class Address {
 	}
 
 	
+	
+	@Override
+	public String toString() {
+		
+		return street+" "+city+" "+state+" "+zip;
+	}
+
+
+
 	public Address(Integer addressID, String street, String city, String state, int zip) {
 		
 		this.addressID = addressID;

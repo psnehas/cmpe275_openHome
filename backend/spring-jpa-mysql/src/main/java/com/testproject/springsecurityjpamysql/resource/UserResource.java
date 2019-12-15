@@ -1,5 +1,10 @@
 package com.testproject.springsecurityjpamysql.resource;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -27,7 +32,7 @@ import com.testproject.springsecurityjpamysql.repository.AddressRepository;
 import com.testproject.springsecurityjpamysql.service.UserService;
 
 @RequestMapping("/user")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class UserResource {
 
@@ -37,9 +42,10 @@ public class UserResource {
 	@Autowired
     JavaMailSender sender;
 
-	
-	@GetMapping(value = "/landing") 
+
+	@GetMapping(value = "/landing" ) 
 	public ResponseEntity<String> loginWithGoogle(OAuth2Authentication p) {
+
 		
 		LinkedHashMap<String, Object> properties = (LinkedHashMap<String, Object>) p.getUserAuthentication().getDetails();
 		String userID = (String) properties.get("email");
@@ -47,7 +53,7 @@ public class UserResource {
 		try {
 			UserProfile user = uService.getUserObject(userID);
 			
-			return ResponseEntity.status(HttpStatus.OK).header("Access-Control-Allow-Origin", "*").body("Google auth successful");			
+			return ResponseEntity.status(HttpStatus.OK).body("Google auth successful");			
 		}
 		catch(NoSuchElementException e) {
 			
@@ -72,32 +78,37 @@ public class UserResource {
 		String link = "http://localhost:8081/user/activate/"+user.getUserID();
 		
 		try {
-			sendEmail(user.getUserID() , "OpenHome Account Activation", "Click here to activate ->"+link);
+			sendEmail(user.getUserID() , "OpenHome Account Activation", 
+					"You have registered with the following details : "+
+					"Name : "+user.getNameOnCard()+
+					"Credit card ending with "+user.getCardNumber().substring(13)+
+					"\nClick here to activate your account ->"+link);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		if (uService.getUserObject(user.getUserID()).getUserID() == user.getUserID() )
+		if (uService.getUserObject(user.getUserID()).getUserID() == user.getUserID() ) {
 			return ResponseEntity.status(HttpStatus.OK).body("Registration successful");
+		}
 		
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User was not registered");
 	}
 	
-	@GetMapping(value = "test")
-	public String test() {
-		return "In!";
-	}
 	
 	
 	@GetMapping(value = "activate/{userID}")
 	public String activate(@PathVariable String userID) {
 		
 		uService.verifyUser(userID);
-				
+		try {
+			sendEmail(userID, "Openhome account activated", "Your OpenHome account has been activated. You can now login with your credentials!");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return "<h1>Activation successful<h1>";
 	}
 	
-	@PostMapping(value = "login" , consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "signin" , consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> login(@RequestBody Object userCred) {
 		
 		Gson g = new Gson();

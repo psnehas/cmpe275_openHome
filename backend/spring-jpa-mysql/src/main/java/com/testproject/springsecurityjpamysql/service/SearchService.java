@@ -22,6 +22,7 @@ import com.testproject.springsecurityjpamysql.model.Availability;
 import com.testproject.springsecurityjpamysql.model.Booking;
 import com.testproject.springsecurityjpamysql.model.Filter;
 import com.testproject.springsecurityjpamysql.model.Property;
+import com.testproject.springsecurityjpamysql.model.Rating;
 import com.testproject.springsecurityjpamysql.model.UserProfile;
 import com.testproject.springsecurityjpamysql.repository.BookingRepository;
 import com.testproject.springsecurityjpamysql.repository.PostingsRepository;
@@ -256,8 +257,16 @@ public class SearchService {
 }
 
 
-	public void addPosting(Property p) {		
-		postRepo.save(p);		
+	public void addPosting(Property p) {	
+	
+		postRepo.save(p);	
+		try {
+			sendEmail(p.getUser().getUserID(), "OpenHome : New Posting",
+					"You new place at "+p.getAddress().toString()+" has been posted on OpenHome");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public Property getProperty(Integer propertyID) {
@@ -364,6 +373,46 @@ public class SearchService {
 		pTemp.setPropertyID(propertyID);
 		
 			
+	}
+
+
+	public ResponseEntity<Object> addRating(Integer propertyID , Double rating) {
+		
+		Property p = new Property();
+		p.setPropertyID(propertyID);
+		Example<Property> propExample = Example.of(p);
+		Property prop = postRepo.findOne(propExample).get();
+		
+		Double currentRating = 0d;
+		Double averageRating = null;
+		int ratingCount = 0;
+		
+		if(prop.getCurrentRating() == null ) {
+			currentRating = rating;
+			averageRating = (double) rating;
+			ratingCount = 1;
+		}
+		else {
+			currentRating = prop.getCurrentRating();
+			currentRating += rating;
+			ratingCount = prop.getRatingCount();
+			ratingCount++;
+			averageRating = (double) (currentRating/ratingCount);			
+		}
+		
+		prop.setRatingCount(ratingCount);
+		prop.setCurrentRating(currentRating);
+		prop.setAverageRating(averageRating);
+		
+		try {			
+			postRepo.save(prop);
+			return ResponseEntity.ok().body(new Rating(propertyID, currentRating, ratingCount, averageRating));
+			
+		}
+		catch(Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Rating failed");
+		}
+						
 	}
 	
 	
