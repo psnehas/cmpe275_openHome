@@ -249,7 +249,7 @@ class PropertySearch extends Component {
                       <Link
                         class="btn btn-outline-dark btn-sm"
                         to={{
-                          pathname: "/propertydetails",
+                          pathname: "/propertydetailsexam",
                           state: {
                             city: this.state.city,
                             startDate: this.state.startDate,

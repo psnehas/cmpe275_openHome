@@ -4,20 +4,20 @@ import { API_ENDPOINT } from "../../constants/routes";
 //import Map from "../Common/Maps/Map";
 import { Map, GoogleApiWrapper } from "google-maps-react";
 // import cardimage from "../../images/usflag.png";
-// import Navbar from "../Common/Navbar/Navbar";
+import Navbar from "../Common/Navbar/Navbar";
 import moment from "moment";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import $ from "jquery";
 import "./PropertyDetails.css";
 import { addDays } from "date-fns/esm";
+import test1 from "../../images/test1.jpg";
+import test2 from "../../images/test2.jpg";
+import test3 from "../../images/test3.jpg";
 var momentBus = require("moment-business-days");
 //var momentHoli = require('moment-holiday');
 
 // import usflag from "../../images/usflag.png";
-// import test1 from "../../images/test1.jpg";
-// import test2 from "../../images/test2.jpg";
-// import test3 from "../../images/test3.jpg";
 
 class PropertyDetailsUpdated extends Component {
   constructor(props) {
@@ -141,8 +141,11 @@ class PropertyDetailsUpdated extends Component {
         {" "}
         <div class="detailsbackground">
           <div class="container-fluid">
-            <div class="row border border-primary"> {/* <Navbar /> */}</div>
-            <div class="row border border-primary mt-3"> HELLO </div>
+            <div class="row border border-primary">
+              {" "}
+              <Navbar />{" "}
+            </div>
+            <div class="row"> </div>
             <div class="row" style={{ "margin-top": "8%" }}>
               <div class="col-lg-6 col-md-6 col-sm-6 ">
                 <div class="card fullproperty ml-4" style={{ width: "50rem" }}>
@@ -170,21 +173,21 @@ class PropertyDetailsUpdated extends Component {
                       <div class="carousel-item active">
                         <img
                           class="d-block w-100"
-                          // src={image1}
+                          src={test1}
                           alt="First slide"
                         />
                       </div>
                       <div class="carousel-item">
                         <img
                           class="d-block w-100"
-                          // src={image2}
+                          src={test2}
                           alt="Second slide"
                         />
                       </div>
                       <div class="carousel-item">
                         <img
                           class="d-block w-100"
-                          // src={image3}
+                          src={test3}
                           alt="Third slide"
                         />
                       </div>

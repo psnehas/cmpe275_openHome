@@ -15,11 +15,13 @@ import PostPropertyUpdated from "./PostProperty/PostPropertyUpdated";
 import PostPropertyLatest from "./PostProperty/PostPropertyLatest";
 import Clock from "./Common/Clock/Clock";
 import NavbarUser from "./Common/NavbarUser/NavbarUser";
+import PropertyDetails_moreUpdates from "../components/Property/PropertyDetails_moreUpdates";
 class Main extends Component {
   render() {
     return (
       <div>
         <Route path="/signup" component={SignUp} />
+
         <Route path="/navbaruser" component={NavbarUser} />
         <Route path="/clock" component={Clock} />
         <Route path="/login" component={Login} />
@@ -32,6 +34,11 @@ class Main extends Component {
         <Route path="/guestdashboard" component={GuestDashboard} />
         <Route path="/landingpage" component={LandingPage} />
         <Route path="/postpropertylatest" component={PostPropertyLatest} />
+        <Route
+          path="/propertydetailsexam"
+          component={PropertyDetails_moreUpdates}
+        />
+
         <Route
           path="/propertydetailsupdated"
           component={PropertyDetailsUpdated}
