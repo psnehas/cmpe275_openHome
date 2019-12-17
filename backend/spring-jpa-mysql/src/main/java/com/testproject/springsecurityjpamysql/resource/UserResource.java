@@ -32,7 +32,7 @@ import com.testproject.springsecurityjpamysql.repository.AddressRepository;
 import com.testproject.springsecurityjpamysql.service.UserService;
 
 @RequestMapping("/user")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 @RestController
 public class UserResource {
 

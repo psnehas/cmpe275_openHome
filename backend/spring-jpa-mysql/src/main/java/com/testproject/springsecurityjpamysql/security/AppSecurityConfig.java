@@ -22,7 +22,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
  	protected void configure(HttpSecurity http) throws Exception {
 		
 		http.csrf().disable().authorizeRequests()
-		.antMatchers(HttpMethod.OPTIONS, "http://localhost:3000").permitAll()
+//		.antMatchers(HttpMethod.OPTIONS, "http://localhost:3000").permitAll()
 		.antMatchers("/user/landing").authenticated()
 		.anyRequest().permitAll()
 		.and()
@@ -33,15 +33,15 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
  	}
 	
 	
-	@Bean
-	CorsConfigurationSource corsConfigurationSource() {
-		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.setAllowedOrigins(Arrays.asList("*"));
-		configuration.setAllowedMethods(Arrays.asList("GET","POST"));
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/user/landing", configuration);
-		return source;
-	}
+//	@Bean
+//	CorsConfigurationSource corsConfigurationSource() {
+//		CorsConfiguration configuration = new CorsConfiguration();
+//		configuration.setAllowedOrigins(Arrays.asList("*"));
+//		configuration.setAllowedMethods(Arrays.asList("GET","POST"));
+//		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//		source.registerCorsConfiguration("/user/landing", configuration);
+//		return source;
+//	}
 	
 //	 @Override
 //	    public void configure(WebSecurity web) throws Exception {
