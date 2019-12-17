@@ -64,7 +64,7 @@ public class UserResource {
 	}
 
 	
-	@PostMapping(value = "register" , consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "register")
 	public ResponseEntity<String> register(@RequestBody Object userJSON) {
 		
 		//create UserProfile object from JSON payload

@@ -24,8 +24,7 @@ class GuestDashboard extends Component {
     // const { city, startDate, endDate, properties } = this.props.location.state;
 
     this.state = {
-      email: "openhomeuser@gmail.com",
-      // email: window.localStorage.getItem("user"),
+      email: window.localStorage.getItem("user"),
       properties: [],
       startDate: "",
       endDate: "",
@@ -34,19 +33,30 @@ class GuestDashboard extends Component {
       cancelled: false,
       openhomeClock: ""
     };
-
-    this.handlecheckIn = this.handlecheckIn.bind(this);
-    this.handlecheckOut = this.handlecheckOut.bind(this);
-    this.handleCancel = this.handleCancel.bind(this);
   }
 
-  handlecheckIn = (e, propertyID) => {
+  handlecheckIn(propertyID, startDate, endDate) {
+    console.log("checkin hit");
+    console.log("property id", propertyID);
+    console.log("start date handle checkin", startDate);
+
+    var sd = new Date(startDate);
+    var start = moment(sd).format("YYYY-MM-DD");
+    console.log("start date formatted handle checkin", start);
+
+    console.log("end date handle checkin", endDate);
+    var ed = new Date(endDate);
+    var end = moment(ed).format("YYYY-MM-DD");
+    console.log("end date formatted handle checkin", end);
+
     const requestBody = {
-      propertyID: propertyID,
-      startDate: this.state.startDate,
-      endDate: this.state.endDate,
+      propertyID: propertyID.toString(),
+      startDate: start,
+      endDate: end,
       checkInTime: this.state.openhomeClock
     };
+
+    console.log("checkin req body ", requestBody);
 
     axios.put(API_ENDPOINT + "/booking/checkin", requestBody).then(response => {
       if (response.status == 200) {
@@ -55,7 +65,9 @@ class GuestDashboard extends Component {
         this.setState({
           checkedIn: true
         });
-      } else {
+      } else if (response.status == 400) {
+        console.log(response.data);
+
         window.alert(response.data);
 
         this.setState({
@@ -63,15 +75,30 @@ class GuestDashboard extends Component {
         });
       }
     });
-  };
+  }
 
-  handlecheckOut = (e, propertyID, startDate, endDate) => {
+  handlecheckOut(propertyID, startDate, endDate) {
+    console.log("checkout hit");
+    console.log("property id", propertyID);
+    console.log("start date handle checkout", startDate);
+
+    var sd = new Date(startDate);
+    var start = moment(sd).format("YYYY-MM-DD");
+    console.log("start date formatted handle checkout", start);
+
+    console.log("end date handle checkout", endDate);
+    var ed = new Date(endDate);
+    var end = moment(ed).format("YYYY-MM-DD");
+    console.log("end date formatted handle checkout", end);
+
     const requestBody = {
-      propertyID: propertyID,
-      startDate: startDate,
-      endDate: endDate,
+      propertyID: propertyID.toString(),
+      startDate: start,
+      endDate: end,
       checkOutTime: this.state.openhomeClock
     };
+
+    console.log("checkout req body ", requestBody);
 
     axios
       .put(API_ENDPOINT + "/booking/checkout", requestBody)
@@ -80,37 +107,60 @@ class GuestDashboard extends Component {
           window.alert(response.data);
 
           this.setState({
-            checkedIn: true
+            checkOut: true
           });
-        } else {
+        } else if (response.status == 400) {
+          console.log(response.data);
+
           window.alert(response.data);
 
           this.setState({
-            checkedIn: false
+            checkOut: false
           });
         }
       });
-  };
+  }
+  handleCancel(propertyID, startDate, endDate) {
+    console.log("cancel hit");
+    console.log("property id", propertyID);
+    console.log("start date handle cancel", startDate);
 
-  handleCancel = (e, propertyID) => {
+    var sd = new Date(startDate);
+    var start = moment(sd).format("YYYY-MM-DD");
+    console.log("start date formatted handle cancel", start);
+
+    console.log("end date handle cancel", endDate);
+    var ed = new Date(endDate);
+    var end = moment(ed).format("YYYY-MM-DD");
+    console.log("end date formatted handle cancel", end);
+
     const requestBody = {
-      propertyID: propertyID,
-      startDate: "",
-      endDate: "",
-      cancelTime: ""
+      propertyID: propertyID.toString(),
+      startDate: start,
+      endDate: end,
+      cancelTime: this.state.openhomeClock
     };
+
+    console.log("cancel req body ", requestBody);
+
     axios.put(API_ENDPOINT + "/booking/cancel", requestBody).then(response => {
       if (response.status == 200) {
+        window.alert(response.data);
+
         this.setState({
           cancelled: true
         });
-      } else {
+      } else if (response.status == 400) {
+        console.log(response.data);
+
+        window.alert(response.data);
+
         this.setState({
           cancelled: false
         });
       }
     });
-  };
+  }
 
   componentDidMount() {
     axios.get(API_ENDPOINT + "/clock/current").then(response => {
@@ -144,8 +194,15 @@ class GuestDashboard extends Component {
   render() {
     console.log(this.state.internetAvailable);
     console.log("TIME", this.state.openhomeClock);
+
     //PROPERTY CARD CODE:
     let propertyCard = this.state.properties.map(property => {
+      console.log(
+        "property bookings start date: ",
+        property.bookings[0].startDate
+      );
+      console.log("property bookings end date: ", property.bookings[0].endDate);
+
       return (
         <div>
           <div class="card mb-3 ml-4" style={{ "max-width": "540px" }}>
@@ -153,8 +210,9 @@ class GuestDashboard extends Component {
               <div class="col-md-4">
                 <img
                   class="card-img"
-                  src={cardimage}
-                  //    style={{ height: "11rem" }}
+                  //src={cardimage}
+                  src={property.images[0]}
+                  style={{ height: "11rem" }}
                 />{" "}
               </div>
               <div class="col-md-8">
@@ -164,11 +222,11 @@ class GuestDashboard extends Component {
                     <p>
                       {" "}
                       <i class="fas fa-map-marker-alt iconscolor"></i>{" "}
-                      {/* {property.address.street != null
+                      {property.address.street != null
                         ? property.address.street
                         : "899"}{" "}
                       , {property.address.city} , {property.address.state},{" "}
-                      {property.address.zip}{" "} */}
+                      {property.address.zip}{" "}
                     </p>
                     <span>
                       {" "}
@@ -190,16 +248,17 @@ class GuestDashboard extends Component {
                       {property.internetAvailable ? "Yes" : "No" || "Yes"}{" "}
                     </span>
                   </p>
-                  <p>
-                    This is a wider card with supporting text below as a natural
-                    lead-in to additional content. This content is a little bit
-                    longer.
-                  </p>
+                  <p>{property.description}</p>
                   <p class="card-text">
                     <small class="text-muted mr-4">
                       <button
                         class="btn btn-outline-dark btn-sm"
-                        onClick={this.handlecheckIn(property.propertyID)}
+                        onClick={this.handlecheckIn.bind(
+                          this,
+                          property.propertyID,
+                          property.bookings[0].startDate,
+                          property.bookings[0].endDate
+                        )}
                       >
                         Check In
                       </button>
@@ -208,7 +267,12 @@ class GuestDashboard extends Component {
                     <small class="text-muted mr-4">
                       <button
                         class="btn btn-outline-dark btn-sm"
-                        onClick={this.handlecheckOut(property.propertyID)}
+                        onClick={this.handlecheckOut.bind(
+                          this,
+                          property.propertyID,
+                          property.bookings[0].startDate,
+                          property.bookings[0].endDate
+                        )}
                       >
                         Check Out
                       </button>
@@ -217,10 +281,15 @@ class GuestDashboard extends Component {
                   <div>
                     <small class="text-muted">
                       <button
-                        class="btn btn-outline-dark btn-sm"
-                        onClick={this.handleCancel(property.propertyID)}
+                        class="btn btn-outline-dark btn-md"
+                        onClick={this.handleCancel.bind(
+                          this,
+                          property.propertyID,
+                          property.bookings[0].startDate,
+                          property.bookings[0].endDate
+                        )}
                       >
-                        Cancel
+                        Cancel Booking
                       </button>
                     </small>
                   </div>

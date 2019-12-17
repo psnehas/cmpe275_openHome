@@ -34,12 +34,7 @@ public class DashboardResource {
 	
 	
 	@GetMapping("/owner/{ownerID}")
-	public String getOwnerDashboard(@PathVariable String ownerID) {
-		
-//		Booking b = new Booking();
-//		b.setOwnerID(ownerID);
-//		Example<Booking> bookings = Example.of(b);				
-//		List<Booking> bList = bookingRepo.findAll(bookings);
+	public List<Property> getOwnerDashboard(@PathVariable String ownerID) {
 		
 		Property p = new Property();
 		UserProfile owner = new UserProfile();
@@ -48,8 +43,7 @@ public class DashboardResource {
 		p.setBooked(true);
 		Example<Property> propExample = Example.of(p);				
 		List<Property> pList = postRepo.findAll(propExample);
-		
-		String res = "";
+	
 		
 		for(Property temp : pList) {
 			
@@ -58,18 +52,50 @@ public class DashboardResource {
 			Example<Booking> bookings = Example.of(b);
 			ArrayList<Booking> bookedList = (ArrayList<Booking>) bookingRepo.findAll(bookings);
 			
-			temp.setBookings(bookedList);
-			
-			Gson g = new Gson();
-			JsonElement jsonElement = g.toJsonTree(temp);
-					
-			res += g.toJson(jsonElement);
-					
+			temp.setBookings(bookedList);					
 		}
 		
-		return res;
+		return pList;
 		
 	}
+	
+//	@GetMapping("/owner/{ownerID}")
+//	public String getOwnerDashboard(@PathVariable String ownerID) {
+//		
+////		Booking b = new Booking();
+////		b.setOwnerID(ownerID);
+////		Example<Booking> bookings = Example.of(b);				
+////		List<Booking> bList = bookingRepo.findAll(bookings);
+//		
+//		Property p = new Property();
+//		UserProfile owner = new UserProfile();
+//		owner.setUserID(ownerID);
+//		p.setUser(owner);
+//		p.setBooked(true);
+//		Example<Property> propExample = Example.of(p);				
+//		List<Property> pList = postRepo.findAll(propExample);
+//		
+//		String res = "";
+//		
+//		for(Property temp : pList) {
+//			
+//			Booking b = new Booking();
+//			b.setPropertyID(temp.getPropertyID());
+//			Example<Booking> bookings = Example.of(b);
+//			ArrayList<Booking> bookedList = (ArrayList<Booking>) bookingRepo.findAll(bookings);
+//			
+//			temp.setBookings(bookedList);
+//			
+//			Gson g = new Gson();
+//			JsonElement jsonElement = g.toJsonTree(temp);
+//					
+//			res += g.toJson(jsonElement);
+//					
+//		}
+//		
+//		return res;
+//		
+//	}
 	
 	@GetMapping("/user/{userID}")
 	public ArrayList<Property> getUserDashboard(@PathVariable String userID) {
