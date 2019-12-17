@@ -5,6 +5,7 @@ import { API_ENDPOINT } from "../../constants/routes";
 import { Map, GoogleApiWrapper } from "google-maps-react";
 import cardimage from "../../images/demo1.jpg";
 import Navbar from "../Common/Navbar/Navbar";
+import NavbarUser from "../Common/NavbarUser/NavbarUser";
 import moment from "moment";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -276,7 +277,7 @@ class PropertySearch extends Component {
       <div>
         <div class="container-fluid ">
           <div class="row border border-primary">
-            <Navbar />
+            <NavbarUser />
           </div>
           <div
             class="row search-sec"

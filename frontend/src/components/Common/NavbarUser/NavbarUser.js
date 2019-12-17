@@ -5,6 +5,16 @@ import usflag from "../../../images/usflag.png";
 import newhouse from "../../../images/house.jpg";
 
 class NavbarUser extends Component {
+  constructor(props) {
+    super(props);
+    this.handleLogOut = this.handleLogOut.bind(this);
+  }
+
+  handleLogOut = e => {
+    window.localStorage.clear();
+    window.alert("Logged out successfully");
+  };
+
   render() {
     return (
       <div>
@@ -32,16 +42,25 @@ class NavbarUser extends Component {
                     <span class="sr-only">(current)</span>
                   </Link>
                 </li>
+                <li class="nav-item active mr-2">
+                  <Link class="nav-link" to="/guestdashboard">
+                    Dashboard
+                  </Link>
+                </li>
                 <li class="nav-item mr-2">
                   <Link className="nav-link" to="#">
-                    WELCOME: {window.localStorage.getItem("user")}
+                    WELCOME: <b> {window.localStorage.getItem("user")} </b>
                   </Link>
                   {/* <a class="nav-link" href="#">
                     Login
                   </a> */}
                 </li>
                 <li class="nav-item mr-2">
-                  <Link className="nav-link" to="/logout">
+                  <Link
+                    className="nav-link"
+                    to="/login"
+                    onClick={this.handleLogOut}
+                  >
                     Log Out
                   </Link>
                 </li>
@@ -54,7 +73,6 @@ class NavbarUser extends Component {
                     English (US)<span className="sr-only">(current)</span>
                   </a>
                 </li>
-                <li class="nav-item ml-4">HELP</li>
               </ul>
             </div>
           </div>

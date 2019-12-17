@@ -11,8 +11,7 @@ import OwnerDashboard from "./OwnerDashboard/OwnerDashboard";
 import GuestDashboard from "./GuestDashboard/GuestDashboard";
 import LandingPage from "./LandingPage/LandingPage";
 import PropertyDetailsUpdated from "./Property/PropertyDetailsUpdated";
-import PostPropertyUpdated from "./PostProperty/PostPropertyUpdated";
-import PostPropertyLatest from "./PostProperty/PostPropertyLatest";
+
 import Clock from "./Common/Clock/Clock";
 import NavbarUser from "./Common/NavbarUser/NavbarUser";
 import PropertyDetails_moreUpdates from "../components/Property/PropertyDetails_moreUpdates";
@@ -33,7 +32,7 @@ class Main extends Component {
         <Route path="/ownerdashboard" component={OwnerDashboard} />
         <Route path="/guestdashboard" component={GuestDashboard} />
         <Route path="/landingpage" component={LandingPage} />
-        <Route path="/postpropertylatest" component={PostPropertyLatest} />
+
         <Route
           path="/propertydetailsexam"
           component={PropertyDetails_moreUpdates}

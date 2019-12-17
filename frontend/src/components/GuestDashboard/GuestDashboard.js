@@ -4,6 +4,7 @@ import { API_ENDPOINT } from "../../constants/routes";
 
 import cardimage from "../../images/demo1.jpg";
 import Navbar from "../Common/Navbar/Navbar";
+import NavbarUser from "../Common/NavbarUser/NavbarUser";
 import moment from "moment";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -23,7 +24,8 @@ class GuestDashboard extends Component {
     // const { city, startDate, endDate, properties } = this.props.location.state;
 
     this.state = {
-      email: window.localStorage.getItem("user"),
+      email: "openhomeuser@gmail.com",
+      // email: window.localStorage.getItem("user"),
       properties: [],
       startDate: "",
       endDate: "",
@@ -129,7 +131,7 @@ class GuestDashboard extends Component {
     axios
       .get(`${API_ENDPOINT}/dashboard/user/${this.state.email}`)
       .then(response => {
-        console.log(response.data);
+        console.log("LIST OF PROPERTIES DID MOUNT", response.data);
 
         if (response.status == 200) {
           this.setState({
@@ -141,6 +143,7 @@ class GuestDashboard extends Component {
 
   render() {
     console.log(this.state.internetAvailable);
+    console.log("TIME", this.state.openhomeClock);
     //PROPERTY CARD CODE:
     let propertyCard = this.state.properties.map(property => {
       return (
@@ -161,23 +164,30 @@ class GuestDashboard extends Component {
                     <p>
                       {" "}
                       <i class="fas fa-map-marker-alt iconscolor"></i>{" "}
-                      {property.address}{" "}
+                      {/* {property.address.street != null
+                        ? property.address.street
+                        : "899"}{" "}
+                      , {property.address.city} , {property.address.state},{" "}
+                      {property.address.zip}{" "} */}
                     </p>
                     <span>
                       {" "}
-                      <i class="fa fa-home iconscolor" /> sdf{" "}
+                      <i class="fa fa-home iconscolor" />{" "}
+                      {property.propertyType}{" "}
                     </span>
                     <span>
                       {" "}
-                      <i class="fa fa-bed iconscolor" /> da{" "}
+                      <i class="fa fa-bed iconscolor" /> {property.bedroomCount}{" "}
                     </span>
                     <span>
                       {" "}
-                      <i class="fas fa-parking iconscolor"></i> sdfss{" "}
+                      <i class="fas fa-parking iconscolor"></i>{" "}
+                      {property.parking.available ? "Yes" : "No" || "Yes"}{" "}
                     </span>
                     <span>
                       {" "}
-                      <i class="fas fa-wifi iconscolor"></i>Sleeps: sfsad{" "}
+                      <i class="fas fa-wifi iconscolor"></i>{" "}
+                      {property.internetAvailable ? "Yes" : "No" || "Yes"}{" "}
                     </span>
                   </p>
                   <p>
@@ -228,7 +238,7 @@ class GuestDashboard extends Component {
       <div>
         <div class="container-fluid ">
           <div class="row border border-primary">
-            <Navbar />
+            <NavbarUser />
           </div>
           <div
             class="row search-sec"
@@ -253,7 +263,7 @@ class GuestDashboard extends Component {
               {/* INSERT PROPERTY CARD HERE */}
               {propertyCard}
               {/* DEMO PROPERTY CARD STARTS */}
-              <div class="card mb-3 ml-6" style={{ "max-width": "540px" }}>
+              {/* <div class="card mb-3 ml-6" style={{ "max-width": "540px" }}>
                 <div class="row no-gutters">
                   <div class="col-md-4">
                     <img
@@ -325,7 +335,7 @@ class GuestDashboard extends Component {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
               {/* DEMO PROPERTY CARD ENDS */}
               {/* <div class="row border border-primary">
                 <div

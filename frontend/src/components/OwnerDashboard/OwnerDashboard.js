@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { API_ENDPOINT } from "../../constants/routes";
-
+import { If, Then, Else, When, Unless, Switch, Case, Default } from "react-if";
 import cardimage from "../../images/usflag.png";
 import Navbar from "../Common/Navbar/Navbar";
+import NavbarOwner from "../Common/NavbarOwner/NavbarOwner";
 import moment from "moment";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -23,7 +24,8 @@ class OwnerDashboard extends Component {
     // const { city, startDate, endDate, properties } = this.props.location.state;
 
     this.state = {
-      email: window.localStorage.getItem("host"),
+      email: "openhomeowner@gmail.com",
+      // email: window.localStorage.getItem("host"),
       properties: [],
       cancelled: false,
       editedFlag: false,
@@ -79,6 +81,20 @@ class OwnerDashboard extends Component {
   };
 
   componentDidMount() {
+    axios
+      .get(`${API_ENDPOINT}/dashboard/owner/${this.state.email}`)
+      .then(response => {
+        console.log("inside didmount response ");
+
+        console.log("PROPERTIES", response.data);
+
+        if (response.status == 200) {
+          this.setState({
+            properties: response.data
+          });
+        }
+      });
+
     axios.get(API_ENDPOINT + "/clock/current").then(response => {
       console.log("CLOCK API", response.data);
 
@@ -91,23 +107,11 @@ class OwnerDashboard extends Component {
         });
       }
     });
-
-    axios
-      .get(`${API_ENDPOINT}/dashboard/owner/${this.state.email}`)
-      .then(response => {
-        console.log("PROPERTIES", response.data);
-
-        if (response.status == 200) {
-          this.setState({
-            properties: response.data
-          });
-        }
-      });
   }
 
   render() {
     console.log("PROPERTIES:  ", this.state.properties);
-    //PROPERTY CARD CODE:
+    // PROPERTY CARD CODE:
     let propertyCard = this.state.properties.map(property => {
       return (
         <div>
@@ -122,12 +126,11 @@ class OwnerDashboard extends Component {
               </div>
               <div class="col-md-8">
                 <div class="card-body">
-                  <h5 class="card-title">{property.propertyName}</h5>
+                  <h5 class="card-title">{}</h5>
                   <p class="card-text">
                     <p>
                       {" "}
                       <i class="fas fa-map-marker-alt iconscolor"></i>{" "}
-                      {property.address}{" "}
                     </p>
                     <span>
                       {" "}
@@ -153,18 +156,20 @@ class OwnerDashboard extends Component {
                   </p>
                   <p class="card-text">
                     <small class="text-muted mr-4">
-                      <button
+                      <Link
                         class="btn btn-outline-dark btn-sm"
-                        onClick={this.handleEdit(property.propertyID)}
+                        to={{
+                          pathname: "/editproperty"
+                        }}
                       >
                         Edit
-                      </button>
+                      </Link>
                     </small>
 
                     <small class="text-muted mr-4">
                       <button
                         class="btn btn-outline-dark btn-sm"
-                        onClick={this.handleCancel(property.propertyID)}
+                        onClick={this.handleCancel()}
                       >
                         Cancel
                       </button>
@@ -177,6 +182,76 @@ class OwnerDashboard extends Component {
         </div>
       );
     });
+    //PROPERTY SEARCH CARD
+    // let propertyCard = this.state.properties.map(property => {
+    //   console.log("inside properties map function");
+    //   return (
+    //     <div>
+    //       <div class="card mb-3 ml-4" style={{ "max-width": "540px" }}>
+    //         <div class="row no-gutters">
+    //           <div class="col-md-4">
+    //             <img
+    //               class="card-img"
+    //               src={cardimage} // replace with {property.images[0]}
+    //               //    style={{ height: "11rem" }}
+    //             />{" "}
+    //           </div>
+    //           <div class="col-md-8">
+    //             <div class="card-body">
+    //               <h5 class="card-title">{property.propertyName}</h5>
+    //               <p class="card-text">
+    //                 <p>
+    //                   {" "}
+    //                   <i class="fas fa-map-marker-alt iconscolor"></i>{" "}
+    //                   {property.address.street} , {property.address.city} ,{" "}
+    //                   {property.address.state}, {property.address.zip}{" "}
+    //                 </p>
+    //                 <span>
+    //                   {" "}
+    //                   <i class="fa fa-home iconscolor" />{" "}
+    //                   {property.propertyType}{" "}
+    //                 </span>
+    //                 <span>
+    //                   {" "}
+    //                   <i class="fa fa-bed iconscolor" /> {property.bedroomCount}{" "}
+    //                 </span>
+    //                 <span>
+    //                   {" "}
+    //                   <i class="fas fa-parking iconscolor"></i>{" "}
+    //                   {property.parking.available ? "Yes" : "No" || "Yes"}{" "}
+    //                 </span>
+    //                 <span>
+    //                   {" "}
+    //                   <i class="fas fa-wifi iconscolor"></i>{" "}
+    //                   {property.internetAvailable ? "Yes" : "No" || "Yes"}{" "}
+    //                 </span>
+    //               </p>
+    //               <p>{property.description}</p>
+    //               <p class="card-text">
+    //                 <small class="text-muted">
+    //                   <Link
+    //                     class="btn btn-outline-dark btn-sm"
+    //                     to={{
+    //                       pathname: "/propertydetailsexam",
+    //                       state: {
+    //                         city: this.state.city,
+    //                         startDate: this.state.startDate,
+    //                         endDate: this.state.endDate,
+    //                         property: property
+    //                       }
+    //                     }}
+    //                   >
+    //                     Details
+    //                   </Link>
+    //                 </small>
+    //               </p>
+    //             </div>
+    //           </div>
+    //         </div>
+    //       </div>
+    //     </div>
+    //   );
+    // });
 
     //PROPERTY CARD CODE ENDS
 
@@ -184,7 +259,7 @@ class OwnerDashboard extends Component {
       <div>
         <div class="container-fluid ">
           <div class="row border border-primary">
-            <Navbar />
+            <NavbarOwner />
           </div>
           <div
             class="row search-sec"
@@ -207,9 +282,22 @@ class OwnerDashboard extends Component {
           <div class="row">
             <div class="col-lg-8 col-md-6 col-sm-6 ">
               {/* INSERT PROPERTY CARD HERE */}
-              {propertyCard}
+              <div>
+                {" "}
+                <If condition={this.state.properties.length > 0}>
+                  <Then>
+                    {" "}
+                    <div>{propertyCard} </div>{" "}
+                  </Then>
+                  <Else>
+                    {" "}
+                    <div> HELLO </div>{" "}
+                  </Else>
+                </If>
+              </div>
+
               {/* DEMO PROPERTY CARD STARTS */}
-              <div class="card mb-3 ml-6" style={{ "max-width": "540px" }}>
+              {/* <div class="card mb-3 ml-6" style={{ "max-width": "540px" }}>
                 <div class="row no-gutters">
                   <div class="col-md-4">
                     <img
@@ -251,12 +339,12 @@ class OwnerDashboard extends Component {
                       </p>
                       <p class="card-text">
                         <small class="text-muted mr-4">
-                          <button
+                          <Link
                             class="btn btn-outline-dark btn-sm"
-                            onClick={this.handleEdit()}
+                            to="/editproperty"
                           >
                             Edit
-                          </button>
+                          </Link>
                         </small>
 
                         <small class="text-muted mr-4">
@@ -271,47 +359,11 @@ class OwnerDashboard extends Component {
                     </div>
                   </div>
                 </div>
-              </div>
-              {/* DEMO PROPERTY CARD ENDS */}
-              {/* <div class="row border border-primary">
-                <div
-                  class="media mediastyle col-lg-8 col-md-8"
-                  style={{ "margin-left": "10%" }}
-                >
-                  <div class="media-left col-lg-4 col-md-4 col-sm-4 border border-primary">
-                    <a href="#">
-                      {" "}
-                      <img
-                        class="media-object"
-                        src={cardimage}
-                        style={cardimagestyle}
-                      />{" "}
-                    </a>
-                  </div>
-
-                  <div class="media-body col-lg-6 col-md-6 col-sm-6 ">
-                    <h4> PROPERTY NAME </h4>
-                    <p>
-                      {" "}
-                      Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                      Natus voluptate suscipit explicabo distinctio sit magnam
-                      consectetur modi, vero eaque eos asperiores placeat vitae
-                      et reiciendis commodi voluptatibus, expedita sint
-                      voluptas.
-                    </p>
-                    <p>
-                      {" "}
-                      Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                      Natus voluptate suscipit explicabo distinctio sit magnam
-                      consectetur modi, vero eaque eos asperiores placeat vitae
-                      et reiciendis commodi voluptatibus, expedita sint
-                      voluptas.
-                    </p>
-                  </div>
-                </div>
               </div> */}
+              {/* DEMO PROPERTY CARD ENDS */}
             </div>
-            <div class="col-lg-4 col-md-6 col-sm-6">
+
+            {/* <div class="col-lg-4 col-md-6 col-sm-6">
               <div class="card w-50">
                 <div class="card-body">
                   <h5 class="card-title">
@@ -324,7 +376,9 @@ class OwnerDashboard extends Component {
                   </p>
                 </div>
               </div>
-            </div>
+            </div> */}
+
+            <div class="col-lg-4 col-md-6 col-sm-6 "></div>
           </div>
         </div>
       </div>

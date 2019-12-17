@@ -42,9 +42,14 @@ class NavbarOwner extends Component {
                     <span class="sr-only">(current)</span>
                   </Link>
                 </li>
+                <li class="nav-item active mr-2">
+                  <Link class="nav-link" to="/ownerdashboard">
+                    Dashboard
+                  </Link>
+                </li>
                 <li class="nav-item mr-2">
                   <Link className="nav-link" to="#">
-                    WELCOME: {window.localStorage.getItem("host")}
+                    WELCOME:<b> {window.localStorage.getItem("host")} </b>
                   </Link>
                   {/* <a class="nav-link" href="#">
                     Login
