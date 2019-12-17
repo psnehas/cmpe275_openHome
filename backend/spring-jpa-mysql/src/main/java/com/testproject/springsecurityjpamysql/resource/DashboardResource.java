@@ -3,6 +3,8 @@ package com.testproject.springsecurityjpamysql.resource;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.ListModel;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -70,12 +72,36 @@ public class DashboardResource {
 	}
 	
 	@GetMapping("/user/{userID}")
-	public List<Booking> getUserDashboard(@PathVariable String userID) {
+	public ArrayList<Property> getUserDashboard(@PathVariable String userID) {
+		
+		ArrayList<Property> result = new ArrayList<Property>();
 		
 		Booking b = new Booking();
 		b.setUserID(userID);
 		Example<Booking> bookings = Example.of(b);				
-		return bookingRepo.findAll(bookings);
+		List<Booking> bList = bookingRepo.findAll(bookings);
+		
+		System.out.println("Booking list size = "+bList.size());
+		
+		for(Booking booking : bList) {
+			
+			int propertyID = booking.getPropertyID();
+			System.out.println("Property id - "+propertyID);
+			Property p = new Property(); 
+			p.setPropertyID(propertyID);
+			Example<Property> propExample = Example.of(p);
+			Property pObject = postRepo.findOne(propExample).get();
+			System.out.println("Property found = "+pObject.getPropertyName());
+			
+			ArrayList<Booking> addBooking = new ArrayList<Booking>();
+			addBooking.add(booking);
+			pObject.setBookings(addBooking);
+			result.add(pObject);
+						
+		}
+		
+		return result;
+		
 		
 	}
 

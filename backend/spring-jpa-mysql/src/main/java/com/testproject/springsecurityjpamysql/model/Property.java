@@ -1,6 +1,5 @@
 package com.testproject.springsecurityjpamysql.model;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,8 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
-
-import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 public class Property {

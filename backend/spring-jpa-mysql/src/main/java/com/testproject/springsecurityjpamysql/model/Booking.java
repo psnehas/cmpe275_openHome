@@ -4,11 +4,7 @@ package com.testproject.springsecurityjpamysql.model;
 import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 @Entity
 public class Booking {
@@ -30,6 +26,11 @@ public class Booking {
 	Boolean checkedOut = false;
 	
 	
+	public Booking() { 	}
+
+
+
+
 	@Override
 	public String toString() {
 		return "\nBooking details : \nTotal payment = $" + bookedPrice + ", \nProperty number=" + propertyID + "\nStart date=" + startDate
@@ -64,10 +65,7 @@ public class Booking {
 	}
 
 	
-	
-	public Booking() { 	}
 
-	
 		
 	public Float getBookedrentWeekday() {
 		return bookedrentWeekday;
