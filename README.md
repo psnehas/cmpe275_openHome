@@ -17,30 +17,29 @@ Requirements file: https://docs.google.com/document/d/1rOctIX2Gr5QnzoDl3ahkj1DG1
 #Build instructions on local –
  |Frontend:|
  |---------|
-|Step 1|cd cmpe275_openHome|
-|Step 2|cd frontend|
-|Step 3|npm install|
-|Step 4|npm start|
-
+|Step 1:cd cmpe275_openHome|
+|Step 2:cd frontend|
+|Step 3:npm install|
+|Step 4:npm start|
+|-----------------|
 |Backend:|
 |---------|
-Using Terminal 
+|Using Terminal:| 
 
-1. cd cmpe275_openHome
-2. cd backend/spring-jpa-mysql/src/main/java/com/testproject/springsecurityjpamysql
-3. javac SpringSecurityJpaMysqlApplication.java
+|Step 1: cd cmpe275_openHome|
+|Step 2: cd backend/spring-jpa-mysql/src/main/java/com/testproject/springsecurityjpamysql|
+|Step 3: javac SpringSecurityJpaMysqlApplication.java|
+|-----------------|
 
-OR
+|Using IDE:|
 
-Using IDE
+|Step 1: Open cmpe275_openHome/backend in Eclipse IDE|
 
-1. Open cmpe275_openHome/backend in Eclipse IDE
+|Step 2: Navigate to : |
 
-2. Navigate to : 
+|spring-jpa-mysql/src/main/java/com/testproject/springsecurityjpamysql|
 
-spring-jpa-mysql/src/main/java/com/testproject/springsecurityjpamysql
-
-3. Run SpringSecurityJpaMysqlApplication.java
-
+|Step 3: Run SpringSecurityJpaMysqlApplication.java|
+|----------------|
 
 
