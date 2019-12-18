@@ -29,15 +29,30 @@ class Clock extends Component {
     };
 
     axios.post(API_ENDPOINT + "/clock/jump", requestBody).then(response => {
-      console.log("ssss ", response.status);
       console.log("data  ", response.data);
-      var check = new Date(response.data);
-      var dateS = moment(check).format("YYYY-MM-DD");
-      var timeS = moment(check).format("HH:MM");
-      var dateFinal = dateS + " " + timeS;
+
+      // var date = new Date(response.data + "UTC");
+
+      // console.log("normal date", date.toString());
+      var gmtDateTime = moment.utc(response.data, "YYYY-MM-DD HH");
+
+      console.log("gmtDateTime  ", gmtDateTime);
+
+      var local = gmtDateTime.format("YYYY-MM-DD HH:MM");
+
+      console.log("local", local);
+      // var check = new Date(response.data);
+      // var dateS = moment(check)
+      //   .utc()
+      //   .format("YYYY-MM-DD");
+      // var timeS = moment(check)
+      //   .utc()
+      //   .format("HH:MM");
+
+      // var dateFinal = dateS + " " + timeS;
       if (response.status === 200) {
         this.setState({
-          openhomeClock: dateFinal
+          openhomeClock: local
         });
       }
       console.log(response);

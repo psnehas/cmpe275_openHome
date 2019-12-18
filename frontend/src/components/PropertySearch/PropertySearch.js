@@ -178,22 +178,25 @@ class PropertySearch extends Component {
 
     //     console.log(requestBody);
 
-    axios.post(API_ENDPOINT + "/posting/search", requestBody).then(response => {
-      if (response.status == 200) {
-        console.log("Filtred search successfully");
-        console.log("RESPONSE", response.data);
-        const result = response.data;
+    axios
+      .post(API_ENDPOINT + "/posting/search", requestBody)
+      .then(response => {
+        if (response.status == 200) {
+          console.log("Filtred search successfully");
+          console.log("RESPONSE", response.data);
+          const result = response.data;
 
-        this.setState({
-          properties: result,
-          searchFlag: true
-        });
-      } else {
-        this.setState({
-          searchFlag: false
-        });
-      }
-    });
+          this.setState({
+            properties: result,
+            searchFlag: true
+          });
+        }
+      })
+      .catch(error => {
+        console.log("ERROR OBJECT", error.response.data);
+
+        window.alert(error.response.data);
+      });
   }
 
   render() {
@@ -250,7 +253,7 @@ class PropertySearch extends Component {
                       <Link
                         class="btn btn-outline-dark btn-sm"
                         to={{
-                          pathname: "/propertydetailsexam",
+                          pathname: "/propertydetails",
                           state: {
                             city: this.state.city,
                             startDate: this.state.startDate,

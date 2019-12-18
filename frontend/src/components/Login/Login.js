@@ -61,33 +61,38 @@ class Login extends Component {
 
     // axios.defaults.withCredentials = true;
 
-    axios.post(API_ENDPOINT + "/user/signin", requestBody).then(response => {
-      console.log("ssss ", response.status);
-      console.log("data  ", response.data);
-      //NORMAL LOGIN
-      if (response.status === 200) {
-        console.log(response.status);
-        console.log("role", response.data);
-        window.alert("Login Successful!");
+    axios
+      .post(API_ENDPOINT + "/user/signin", requestBody)
+      .then(response => {
+        console.log("ssss ", response.status);
+        console.log("data  ", response.data);
+        //NORMAL LOGIN
+        if (response.status === 200) {
+          console.log(response.status);
+          console.log("role", response.data);
+          window.alert("Login Successful!");
 
-        this.setState({
-          role: response.data
-        });
+          this.setState({
+            role: response.data
+          });
 
-        // const USERROLE = response.data;
-        // window.localStorage.setItem(USERROLE, this.state.email);
+          // const USERROLE = response.data;
+          // window.localStorage.setItem(USERROLE, this.state.email);
 
-        if (response.data == "user") {
-          window.localStorage.setItem("user", this.state.email);
-          this.props.history.push("/home");
-        } else {
-          window.localStorage.setItem("host", this.state.email);
-          this.props.history.push("/postproperty");
+          if (response.data == "user") {
+            window.localStorage.setItem("user", this.state.email);
+            this.props.history.push("/home");
+          } else {
+            window.localStorage.setItem("host", this.state.email);
+            this.props.history.push("/postproperty");
+          }
         }
-      } else if (response.status == 400) {
-        window.alert("Login Failed! Please enter username/ password");
-      }
-    });
+      })
+      .catch(error => {
+        console.log("ERROR OBJECT", error.response.data);
+
+        window.alert(error.response.data);
+      });
   }
 
   render() {

@@ -58,23 +58,22 @@ class GuestDashboard extends Component {
 
     console.log("checkin req body ", requestBody);
 
-    axios.put(API_ENDPOINT + "/booking/checkin", requestBody).then(response => {
-      if (response.status == 200) {
-        window.alert(response.data);
+    axios
+      .put(API_ENDPOINT + "/booking/checkin", requestBody)
+      .then(response => {
+        if (response.status == 200) {
+          window.alert(response.data);
 
-        this.setState({
-          checkedIn: true
-        });
-      } else if (response.status == 400) {
-        console.log(response.data);
+          this.setState({
+            checkedIn: true
+          });
+        }
+      })
+      .catch(error => {
+        console.log("ERROR OBJECT", error.response.data);
 
-        window.alert(response.data);
-
-        this.setState({
-          checkedIn: false
-        });
-      }
-    });
+        window.alert(error.response.data);
+      });
   }
 
   handlecheckOut(propertyID, startDate, endDate) {
@@ -109,15 +108,12 @@ class GuestDashboard extends Component {
           this.setState({
             checkOut: true
           });
-        } else if (response.status == 400) {
-          console.log(response.data);
-
-          window.alert(response.data);
-
-          this.setState({
-            checkOut: false
-          });
         }
+      })
+      .catch(error => {
+        console.log("ERROR OBJECT", error.response.data);
+
+        window.alert(error.response.data);
       });
   }
   handleCancel(propertyID, startDate, endDate) {
@@ -143,23 +139,22 @@ class GuestDashboard extends Component {
 
     console.log("cancel req body ", requestBody);
 
-    axios.put(API_ENDPOINT + "/booking/cancel", requestBody).then(response => {
-      if (response.status == 200) {
-        window.alert(response.data);
+    axios
+      .put(API_ENDPOINT + "/booking/cancel", requestBody)
+      .then(response => {
+        if (response.status == 200) {
+          window.alert(response.data);
 
-        this.setState({
-          cancelled: true
-        });
-      } else if (response.status == 400) {
-        console.log(response.data);
+          this.setState({
+            cancelled: true
+          });
+        }
+      })
+      .catch(error => {
+        console.log("ERROR OBJECT", error.response.data);
 
-        window.alert(response.data);
-
-        this.setState({
-          cancelled: false
-        });
-      }
-    });
+        window.alert(error.response.data);
+      });
   }
 
   componentDidMount() {

@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.testproject.springsecurityjpamysql.model.Address;
 import com.testproject.springsecurityjpamysql.model.Availability;
@@ -284,9 +285,10 @@ public class SearchService {
 	}
 
 
+	@Transactional(rollbackFor=Exception.class)
 	public ResponseEntity<String> checkIn(Integer propertyID, Float payment, String userID, Date checkIn) {
 				
-		
+		try {
 		//Get card number from UserProfile
 		UserProfile user = new UserProfile();
 		user.setUserID(userID);
@@ -345,7 +347,7 @@ public class SearchService {
 				+"\nAddress : "+prop.getAddress().getStreet()+" "+prop.getAddress().getCity()+" "+prop.getAddress().getZip()
 				+"\nBooked until : "+bookingObject.getEndDate()+""
 				+"\n\nThanks and regards,\nOpenHome";
-		try {
+//		try {
 			sendEmail(bookingObject.getUserID() , "OpenHome charges" , msgBody );
 		} catch (Exception e) {
 			e.printStackTrace();

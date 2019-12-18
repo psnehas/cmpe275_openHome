@@ -74,33 +74,36 @@ class HomePage extends Component {
       endDate: ed
     };
 
-    axios.post(API_ENDPOINT + "/posting/search", requestBody).then(response => {
-      if (response.status == 200) {
-        console.log("Searched successfully");
+    axios
+      .post(API_ENDPOINT + "/posting/search", requestBody)
+      .then(response => {
+        if (response.status == 200) {
+          console.log("Searched successfully");
 
-        const result = response.data;
-        console.log("response data", result);
-        this.setState({
-          properties: result,
-          searchFlag: true
-        });
+          const result = response.data;
+          console.log("response data", result);
+          this.setState({
+            properties: result,
+            searchFlag: true
+          });
 
-        this.props.history.push({
-          pathname: "/propertysearch",
-          state: {
-            city: this.state.city,
-            startDate: sd,
-            endDate: ed,
-            properties: this.state.properties
-            // searched: false
-          }
-        });
-      } else {
-        this.setState({
-          searchFlag: false
-        });
-      }
-    });
+          this.props.history.push({
+            pathname: "/propertysearch",
+            state: {
+              city: this.state.city,
+              startDate: sd,
+              endDate: ed,
+              properties: this.state.properties
+              // searched: false
+            }
+          });
+        }
+      })
+      .catch(error => {
+        console.log("ERROR OBJECT", error.response.data);
+
+        window.alert(error.response.data);
+      });
   }
 
   componentDidMount() {

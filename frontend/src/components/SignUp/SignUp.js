@@ -51,20 +51,23 @@ class SignUp extends Component {
       nameOnCard: this.state.nameOnCard,
       role: "user"
     };
-    axios.post(API_ENDPOINT + "/user/register", requestBody).then(response => {
-      if (response.status == 200) {
-        window.alert("Signed Up Successfully!");
-        this.setState({
-          signupflag: true
-        });
-        console.log();
-        this.props.history.push("/login");
-      } else {
-        this.setState({
-          signupflag: false
-        });
-      }
-    });
+    axios
+      .post(API_ENDPOINT + "/user/register", requestBody)
+      .then(response => {
+        if (response.status == 200) {
+          window.alert("Signed Up Successfully!");
+          this.setState({
+            signupflag: true
+          });
+          console.log();
+          this.props.history.push("/login");
+        }
+      })
+      .catch(error => {
+        console.log("ERROR OBJECT", error.response.data);
+
+        window.alert(error.response.data);
+      });
   }
 
   handleOwnerSignUp(e) {
@@ -82,23 +85,26 @@ class SignUp extends Component {
       nameOnCard: this.state.nameOnCard,
       role: "host"
     };
-    axios.post(API_ENDPOINT + "/user/register", requestBody).then(response => {
-      console.log("response -----", response);
+    axios
+      .post(API_ENDPOINT + "/user/register", requestBody)
+      .then(response => {
+        console.log("response -----", response);
 
-      if (response.status == 200) {
-        window.alert("Sign Up Successful");
+        if (response.status == 200) {
+          window.alert("Sign Up Successful");
 
-        this.setState({
-          signupflag: true
-        });
+          this.setState({
+            signupflag: true
+          });
 
-        this.props.history.push("/login");
-      } else {
-        this.setState({
-          signupflag: false
-        });
-      }
-    });
+          this.props.history.push("/login");
+        }
+      })
+      .catch(error => {
+        console.log("ERROR OBJECT", error.response.data);
+
+        window.alert(error.response.data);
+      });
   }
 
   handleCardName = e => {

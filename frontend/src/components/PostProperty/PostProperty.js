@@ -206,18 +206,21 @@ class PostProperty extends Component {
 
     console.log("REQ BODY POST", requestBody);
 
-    axios.post(API_ENDPOINT + "/posting/place", requestBody).then(response => {
-      if (response.status == 200) {
-        window.alert("Property Posted Successfully!");
-        this.setState({
-          postedFlag: true
-        });
-      } else {
-        this.setState({
-          postedFlag: false
-        });
-      }
-    });
+    axios
+      .post(API_ENDPOINT + "/posting/place", requestBody)
+      .then(response => {
+        if (response.status == 200) {
+          window.alert("Property Posted Successfully!");
+          this.setState({
+            postedFlag: true
+          });
+        }
+      })
+      .catch(error => {
+        console.log("ERROR OBJECT", error.response.data);
+
+        window.alert(error.response.data);
+      });
   };
 
   handlealwaysAvailable = e => {

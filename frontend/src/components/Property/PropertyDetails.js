@@ -3,7 +3,7 @@ import axios from "axios";
 import { API_ENDPOINT } from "../../constants/routes";
 import { Map, GoogleApiWrapper } from "google-maps-react";
 import cardimage from "../../images/usflag.png";
-import Navbar from "../Common/Navbar/Navbar";
+import NavbarUser from "../Common/NavbarUser/NavbarUser";
 import moment from "moment";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -25,21 +25,25 @@ class PropertyDetails extends Component {
 
     const { city, startDate, endDate, property } = this.props.location.state;
 
-    console.log(city);
-    console.log(startDate);
-    console.log(endDate);
-    console.log(property);
+    // console.log(city);
+    // console.log(startDate);
+    // console.log(endDate);
+    console.log("properties: " + JSON.stringify(this.props.location.state));
 
     this.state = {
       email: window.localStorage.getItem("user"),
       city: city,
       startDate: startDate,
       endDate: endDate,
+      // startDate: "",
+      // endDate: "",
       property,
       bookedFlag: false,
       parking: false,
       estimate: 0.0,
-      isEstimated: ""
+      isEstimated: "",
+      minDay: minDay,
+      maxDay: maxDay
     };
     this.handleBooking = this.handleBooking.bind(this);
   }
@@ -52,8 +56,9 @@ class PropertyDetails extends Component {
     console.log("start: ", start);
     var noOfDays = end.diff(start, "days", false) + 1;
     console.log("noOfDays: ", noOfDays);
+    console.log("Parking charges: " + this.state.property);
 
-    if (start < end && noOfDays > 0 && noOfDays < 16) {
+    if (noOfDays > 0 && noOfDays < 16) {
       console.log("valid dates");
       var businessDays = momentBus(start).businessDiff(momentBus(end)) + 1;
       var holidays = noOfDays - businessDays;
@@ -65,7 +70,7 @@ class PropertyDetails extends Component {
       var hRent = this.state.property.rentWeekend * holidays;
       var parkingRent = 0.0;
       if (this.state.parking == true) {
-        parkingRent = noOfDays * this.state.property.parking.daily_fee;
+        parkingRent = noOfDays * this.state.property.parking.dailyFee;
       }
 
       var totalBill = bRent + hRent + parkingRent;
@@ -102,20 +107,22 @@ class PropertyDetails extends Component {
       //property: property
     };
 
-    axios.post(API_ENDPOINT + "/booking/new", requestBody).then(response => {
-      if (response.status == 200) {
-        console.log("Booked successfully");
-        window.alert("Property Booked Successfuly");
-        this.setState({
-          bookedFlag: true
-        });
-      } else {
-        window.alert("Unable to Book this property");
-        this.setState({
-          bookedFlag: false
-        });
-      }
-    });
+    axios
+      .post(API_ENDPOINT + "/booking/new", requestBody)
+      .then(response => {
+        if (response.status == 200) {
+          console.log("Booked successfully");
+          window.alert("Property Booked Successfuly");
+          this.setState({
+            bookedFlag: true
+          });
+        }
+      })
+      .catch(error => {
+        console.log("ERROR OBJECT", error.response.data);
+
+        window.alert(error.response.data);
+      });
   };
 
   estimation = () => {
@@ -135,15 +142,34 @@ class PropertyDetails extends Component {
     var imgLink =
       "https://firebasestorage.googleapis.com/v0/b/openhome275-9ad6a.appspot.com/o/images";
     var nameArr = this.state.property.images.split(",");
+    console.log("images: " + nameArr);
+    var image1 = imgLink + nameArr[0]; //active image
 
-    console.log(nameArr);
+    //other images
+    var otherImages = [];
 
-    var image1 = imgLink + nameArr[0];
-    var image2 = imgLink + nameArr[1];
-    var image3 = imgLink + nameArr[2];
-    console.log(image1);
-    console.log(image2);
-    console.log(image3);
+    for (var i = 1, j = 0; i < nameArr.length; i++, j++) {
+      otherImages[j] = nameArr[i];
+    }
+
+    console.log("Other images: " + otherImages);
+
+    // var image2 = imgLink + nameArr[1];
+    // var image3 = imgLink + nameArr[2];
+    // console.log(image1);
+    // console.log(image2);
+    // console.log(image3);
+
+    let imageCarousel = otherImages.map(imageName => {
+      var imageUrl = imgLink + imageName;
+      console.log("imageURL: " + imageUrl);
+      return (
+        <div class="carousel-item">
+          <img class="d-block w-100" src={imageUrl} alt="Third slide" />
+        </div>
+      );
+    });
+
     return (
       <div>
         {" "}
@@ -151,7 +177,7 @@ class PropertyDetails extends Component {
           <div class="container-fluid">
             <div class="row border border-primary">
               {" "}
-              <Navbar />
+              <NavbarUser />
             </div>
             <div class="row border border-primary mt-3"> HELLO </div>
             <div class="row" style={{ "margin-top": "8%" }}>
@@ -185,7 +211,8 @@ class PropertyDetails extends Component {
                           alt="First slide"
                         />
                       </div>
-                      <div class="carousel-item">
+                      {imageCarousel}
+                      {/*<div class="carousel-item">
                         <img
                           class="d-block w-100"
                           src={image2}
@@ -198,7 +225,7 @@ class PropertyDetails extends Component {
                           src={image3}
                           alt="Third slide"
                         />
-                      </div>
+                      </div> */}
                     </div>
                     <a
                       class="carousel-control-prev"
@@ -269,25 +296,19 @@ class PropertyDetails extends Component {
                         <td> Parking </td>
                       </tr>
                       <tr>
+                        <td>{this.state.property.propertyType}</td>
+                        <td>{this.state.property.bedroomCount}</td>
                         <td>
-                          {this.state.property.propertyType || "Bungalow"}
-                        </td>
-                        <td>{this.state.property.bedroomCount || 2}</td>
-                        <td>
-                          {this.state.property.internetAvailable
-                            ? "Yes"
-                            : "No" || "Yes"}
+                          {this.state.property.internetAvailable ? "Yes" : "No"}
                         </td>
                         <td>
                           {this.state.property.privateBathAvailable
                             ? "Yes"
-                            : "No" || "Yes"}
+                            : "No"}
                         </td>
-                        <td> {this.state.property.area || 312} </td>
+                        <td> {this.state.property.area} </td>
                         <td>
-                          {this.state.property.parking.available
-                            ? "Yes"
-                            : "No" || "Yes"}
+                          {this.state.property.parking.available ? "Yes" : "No"}
                         </td>
                       </tr>
                     </table>
@@ -301,10 +322,7 @@ class PropertyDetails extends Component {
                         </tr>
 
                         <tr>
-                          <td>
-                            {" "}
-                            {this.state.property.sharingType || "Private"}{" "}
-                          </td>
+                          <td> {this.state.property.sharingType} </td>
                         </tr>
                       </table>
                       <hr />
@@ -319,7 +337,7 @@ class PropertyDetails extends Component {
                         </tr>
 
                         <tr>
-                          <td> {this.state.property.area || 312} sq. ft </td>
+                          <td> {this.state.property.area} sq. ft </td>
                         </tr>
                       </table>
                       <hr />
@@ -333,7 +351,7 @@ class PropertyDetails extends Component {
                         </tr>
 
                         <tr>
-                          <td> {this.state.property.bedroomCount || 2} </td>
+                          <td> {this.state.property.bedroomCount} </td>
                         </tr>
                       </table>
                       <hr />
@@ -346,22 +364,22 @@ class PropertyDetails extends Component {
                           <th> Private Bath / Shower </th>
                         </tr>
 
-                        <tr>
+                        <tr align="center">
                           <td> Bath </td>
                           <td> Shower </td>
                         </tr>
-                        <tr>
+                        <tr align="center">
                           <td>
                             {" "}
                             {this.state.property.privateBathAvailable
                               ? "Yes"
-                              : "No" || "Yes"}{" "}
+                              : "No"}{" "}
                           </td>
                           <td>
                             {" "}
                             {this.state.property.privateShowerAvailable
                               ? "Yes"
-                              : "No" || "Yes"}{" "}
+                              : "No"}{" "}
                           </td>
                         </tr>
                       </table>
@@ -381,7 +399,7 @@ class PropertyDetails extends Component {
                             {" "}
                             {this.state.property.internetAvailable
                               ? "Yes"
-                              : "No" || "Yes"}{" "}
+                              : "No"}
                           </td>
                         </tr>
                       </table>
@@ -390,33 +408,29 @@ class PropertyDetails extends Component {
                     {/*TABLE ENDS */}
                     {/* TABLE STARTS*/}
                     <div>
-                      <table>
+                      <table style={{ width: 400 }}>
                         <tr>
                           <th> Parking </th>
                         </tr>
 
-                        <tr>
+                        <tr align="center">
                           <td> Availiablity </td>
-
-                          <td> Paid {"  "} </td>
-                          <td> Charges {"  "}</td>
+                          <td> Paid </td>
+                          <td> Charges</td>
                         </tr>
-                        <tr>
+                        <tr align="center">
                           <td>
-                            {" "}
                             {this.state.property.parking.available
                               ? "Yes"
-                              : "No" || "Yes"}{" "}
+                              : "No"}
                           </td>
                           <td>
-                            {" "}
+                            {this.state.property.parking.paid ? "Yes" : "No"}
+                          </td>
+                          <td>
                             {this.state.property.parking.paid
-                              ? "Yes"
-                              : "No" || "Yes"}{" "}
-                          </td>
-                          <td>
-                            {" "}
-                            {this.state.property.parking.dailyFee || 100}{" "}
+                              ? this.state.property.parking.dailyFee
+                              : "-"}
                           </td>
                         </tr>
                       </table>
@@ -429,10 +443,10 @@ class PropertyDetails extends Component {
               <div className="col-lg-2 col-md-2 col-sm-2"> </div>
               <div class="col-lg-4 col-md-4 col-sm-4 ">
                 <div
-                  class="card w-50"
+                  class="card w-80"
                   style={{
                     "margin-top": "0%",
-                    "margin-left": "34%"
+                    "margin-left": "24%"
                   }}
                 >
                   <div class="card-body">
@@ -447,7 +461,7 @@ class PropertyDetails extends Component {
                       </a>{" "}
                     </div>
 
-                    <p>
+                    {/* <p>
                       {" "}
                       <i class="fa fa-star starcolor" />
                       <i class="fa fa-star starcolor" />
@@ -455,67 +469,82 @@ class PropertyDetails extends Component {
                       <i class="fa fa-star starcolor" />
                       <i class="fa fa-star-half-o starcolor" />
                       <span>14 Reviews </span>
-                    </p>
-                    <p>
-                      <i class="fa fa-check-circle checkboxcolor" />
-                      Your dates are Available!
-                    </p>
+                    </p> */}
 
                     {/* MY OLD CODE */}
-                    <div class="row">
-                      <div class="col-lg-6 col-md-3 col-sm-12 p-0">
-                        <input
-                          type="date"
-                          id="startDate"
-                          min={this.state.minDay}
-                          max={this.state.maxDay}
-                          onChange={e => {
-                            this.setState({ startDate: e.target.value });
-                          }}
-                          value={this.state.startDate}
-                          placeholder="Start Date"
-                        />
-                      </div>
-                    </div>
-                    <br />
-                    <div class="row">
-                      <div class="col-lg-6 col-md-3 col-sm-12 p-0">
-                        <input
-                          type="date"
-                          id="endDate"
-                          min={this.state.minDay}
-                          max={this.state.maxDay}
-                          onChange={e => {
-                            this.setState({ endDate: e.target.value });
-                          }}
-                          value={this.state.endDate}
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <br></br>
-                      <b>Book Parking</b>
-                      <br></br>
-                      <label class="radio-inline" style={{ paddingRight: 35 }}>
-                        <input
-                          type="radio"
-                          name="rb"
-                          onClick={this.checkHandler}
-                          value="true"
-                        />
-                        Yes
-                      </label>
-                      <label class="radio-inline">
-                        <input
-                          type="radio"
-                          name="rb"
-                          onClick={this.checkHandler}
-                          value="false"
-                        />
-                        No
-                      </label>
-                    </div>
+                    <br></br>
+                    <div align="left">
+                      <div class="row">
+                        <div class="col-lg-6 col-md-3 col-sm-12 p-0">
+                          <h6>Check In</h6>
+                          <input
+                            type="date"
+                            id="startDate"
+                            min={this.state.minDay}
+                            max={this.state.maxDay}
+                            onChange={e => {
+                              this.setState({ startDate: e.target.value });
+                            }}
+                            value={this.state.startDate}
+                            placeholder="Start Date"
+                          />
+                        </div>
 
+                        <div class="col-lg-6 col-md-3 col-sm-12 p-0">
+                          <h6>Check Out</h6>
+                          <input
+                            type="date"
+                            id="endDate"
+                            min={this.state.startDate}
+                            max={this.state.maxDay}
+                            onChange={e => {
+                              this.setState({ endDate: e.target.value });
+                            }}
+                            value={this.state.endDate}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    {this.state.property.parking.available && (
+                      <div>
+                        <br></br>
+                        <b>Book Parking</b>
+                        <br></br>
+                        <label
+                          class="radio-inline"
+                          style={{ paddingRight: 35 }}
+                        >
+                          <input
+                            type="radio"
+                            name="rb"
+                            onClick={e => {
+                              this.setState({
+                                parking: true,
+                                isEstimated: false
+                              });
+                            }}
+                            value="true"
+                          />
+                          Yes
+                        </label>
+                        <label class="radio-inline">
+                          <input
+                            type="radio"
+                            name="rb"
+                            onClick={e => {
+                              this.setState({
+                                parking: false,
+                                isEstimated: false
+                              });
+                            }}
+                            value="false"
+                          />
+                          No
+                        </label>
+                      </div>
+                    )}
+
+                    <br></br>
                     <a
                       href="#"
                       onClick={() => this.showEstimate()}
