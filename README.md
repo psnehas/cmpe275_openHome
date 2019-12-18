@@ -12,5 +12,35 @@ Requirements file: https://docs.google.com/document/d/1rOctIX2Gr5QnzoDl3ahkj1DG1
 |Shravani Pande|013849264|
 |Sneha|013850174|
 
+#App URL –  http://ec2-52-53-166-161.us-west-1.compute.amazonaws.com:3000
+ 
+#Build instructions on local –
+ |Frontend:|
+ |---------|
+|Step 1|cd cmpe275_openHome|
+|Step 2|cd frontend|
+|Step 3|npm install|
+|Step 4|npm start|
+
+|Backend:|
+|---------|
+Using Terminal 
+
+1. cd cmpe275_openHome
+2. cd backend/spring-jpa-mysql/src/main/java/com/testproject/springsecurityjpamysql
+3. javac SpringSecurityJpaMysqlApplication.java
+
+OR
+
+Using IDE
+
+1. Open cmpe275_openHome/backend in Eclipse IDE
+
+2. Navigate to : 
+
+spring-jpa-mysql/src/main/java/com/testproject/springsecurityjpamysql
+
+3. Run SpringSecurityJpaMysqlApplication.java
+
 
 
