@@ -57,83 +57,66 @@ d.  	Services – Mediator classes between Resource classes and the Data Reposit
 ## ARCHITECTURE DIAGRAM:
 <img src="https://github.com/psnehas/cmpe275_openHome/blob/master/images/architecture.png">
 ## DATABASE ENTITY DIAGRAM:
-![Image description] (https://github.com/psnehas/cmpe275_openHome/blob/master/images/Database.png)
+<img src="https://github.com/psnehas/cmpe275_openHome/blob/master/images/Database.png">
 ## Final Application WorkFlow:
 ------------------------------
 ## OWNER ACTIVITIES:
 ### 1. New Owner sign-up:
 Any user who signs up with the SJSU email ID is considered as an Owner. At sign-up, the owner has to provide his First Name, Last Name, Password, email ID, 10 digit phone number. He is also asked to enter is card details at signup as a required information. 
-![Image description] (https://github.com/psnehas/cmpe275_openHome/blob/master/images/owner_Signup.png)
+<img src="https://github.com/psnehas/cmpe275_openHome/blob/master/images/owner_Signup.png">
 ### 2. Login:
 An owner can login with his email ID and password. He is navigated to the “Host Your Property” page.
-![Image description] (https://github.com/psnehas/cmpe275_openHome/blob/master/images/owner_login.png)
+<img src="https://github.com/psnehas/cmpe275_openHome/blob/master/images/owner_login.png">
 ### 3. Host a Property:
 A host creates a new property by giving various property details such as property description, address, availability, type of property, Internet and parking availability, daily parking fees if available, rent for weekdays and weekends.
-![Image description]
- (https://github.com/psnehas/cmpe275_openHome/blob/master/images/hostProp_1.png)
- ![Image description]
-(https://github.com/psnehas/cmpe275_openHome/blob/master/images/hostProp_2.png)
+<img src="https://github.com/psnehas/cmpe275_openHome/blob/master/images/hostProp_1.png">
+<img src="https://github.com/psnehas/cmpe275_openHome/blob/master/images/hostProp_2.png">
 ### 4. Email Notification:
 The owner receives a confirmation email on his email ID once the property is posted successfully.
-![Image description]
-( https://github.com/psnehas/cmpe275_openHome/blob/master/images/newPostEmail.png)
+<img src="https://github.com/psnehas/cmpe275_openHome/blob/master/images/newPostEmail.png">
 ### 5. Owner’s Dashboard:
 Owner can view all his properties on his dashboard. He can view the properties hosted by him and the properties which are currently reserved and the ones reserved in the past.
-![Image description]
-( https://github.com/psnehas/cmpe275_openHome/blob/master/images/ownerDashboard.png)
+<img src="https://github.com/psnehas/cmpe275_openHome/blob/master/images/ownerDashboard.png">
 ### 6. Edit an already reserved property:
 An owner can edit a property once posted. He can change the daily availability, weekday and weekend rents, parking and internet availability, etc. A property can also be edited even after a guest has reserved the property or has checked in to the property.
-![Image description]
-( https://github.com/psnehas/cmpe275_openHome/blob/master/images/editProperty.png)
+<img src="https://github.com/psnehas/cmpe275_openHome/blob/master/images/editProperty.png">
 ### 7. Email notification to the Owner - new Property booked:
-![Image description] (https://github.com/psnehas/cmpe275_openHome/blob/master/images/emailOwner_newPropBooked.png)
+<img src="https://github.com/psnehas/cmpe275_openHome/blob/master/images/emailOwner_newPropBooked.png">
 
 ## GUEST ACTIVITIES:
 ### 1. New User Sign-up:
 A guest can sign up with Google, Facebook or a personal email ID . At sign-up, the owner has to provide his First Name, Last Name, Password, email ID, 10 digit phone number. He is also asked to enter is card details at signup as a required information.
-![Image description]
-( https://github.com/psnehas/cmpe275_openHome/blob/master/images/guest_signup.png)
+<img src="https://github.com/psnehas/cmpe275_openHome/blob/master/images/guest_signup.png">
 ### 2. Login:
 A guest can login with his email ID and password. He is navigated to the Home page where he can search a property. 
-![Image description]
-( https://github.com/psnehas/cmpe275_openHome/blob/master/images/guestLogin.png)
+<img src="https://github.com/psnehas/cmpe275_openHome/blob/master/images/guestLogin.png">
 ### 3. Enter search fields:
 Guest enters the desired city, start date and end date to search for a property. He is navigated to a search results page where he can view all the properties matching his search criteria.
-![Image description]
-( https://github.com/psnehas/cmpe275_openHome/blob/master/images/searchProp.png)
+<img src="https://github.com/psnehas/cmpe275_openHome/blob/master/images/searchProp.png">
 ### 4. Apply filters:
 A guest can filter the properties according to Sharing type, Property Type, Price range and Internet availability.
-![Image description]
-(https://github.com/psnehas/cmpe275_openHome/blob/master/images/applyFilters.png)
+<img src="https://github.com/psnehas/cmpe275_openHome/blob/master/images/applyFilters.png">
 ### 5. View Property Details:
 A guest selects “Details” option for a property he wishes to view. A guest can book the property here.
-![Image description]
- (https://github.com/psnehas/cmpe275_openHome/blob/master/images/propDetails_1.png)
- ![Image description]
- (https://github.com/psnehas/cmpe275_openHome/blob/master/images/propDetails_2.png)
+<img src="https://github.com/psnehas/cmpe275_openHome/blob/master/images/propDetails_1.png">
+<img src="https://github.com/psnehas/cmpe275_openHome/blob/master/images/propDetails_2.png">
 ### 6. Book Property:
 A guest enters the start date and end date for his reservation. He is not allowed to select dates which are a year later than the current date. If the property has parking available, the guest has the provision to book or not book the parking. A guest can view his estimated rent before booking the property is booked.
-![Image description]
-(https://github.com/psnehas/cmpe275_openHome/blob/master/images/bookProp.png)
+<img src="https://github.com/psnehas/cmpe275_openHome/blob/master/images/bookProp.png">
 ### 7. Email Notification:
 Guest receives an email confirmation about the property booked by him.
-![Image description]
-( https://github.com/psnehas/cmpe275_openHome/blob/master/images/emailGuest_newBooking.png)
+<img src="https://github.com/psnehas/cmpe275_openHome/blob/master/images/emailGuest_newBooking.png">
 ### 8. Guest’s Dashboard:
 Guest can view all his currently reserved properties on his dashboard. He can also view his past reservations. A guest can check-in, check-out or cancel his reservation with the respective options provided for the current reservations.
-![Image description]
-(https://github.com/psnehas/cmpe275_openHome/blob/master/images/guestDashboard.png)
+<img src="https://github.com/psnehas/cmpe275_openHome/blob/master/images/guestDashboard.png">
 ### 9. Check-in to the Property:
 A guest checks in to the property. He can only check-in on the day of his reservation. (not before 3 PM)
-![Image description]
-( https://github.com/psnehas/cmpe275_openHome/blob/master/images/checkinProp.png)
+<img src="https://github.com/psnehas/cmpe275_openHome/blob/master/images/checkinProp.png">
 ### 10. Credit card charged notification on Check-In:
 Guest’s credit card is charged with the estimated amount (the amount is calculated when the user books the property). He is notified about the deductions via email.
-![Image description]
-( https://github.com/psnehas/cmpe275_openHome/blob/master/images/guestChargesCheckin.png)
+<img src="https://github.com/psnehas/cmpe275_openHome/blob/master/images/guestChargesCheckin.png">
 ## CUSTOM APPLICATION CLOCK:
-![Image description]
-( https://github.com/psnehas/cmpe275_openHome/blob/master/images/clock.png)
+<img src="https://github.com/psnehas/cmpe275_openHome/blob/master/images/clock.png">
 ### Testing plan executed and results:
 As a part of application testing, we have conducted manual test cases during the development phase as well as after the complete integration. Following are the test scenarios tests and the test results obtained.
 
