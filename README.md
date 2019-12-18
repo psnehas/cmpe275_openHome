@@ -55,7 +55,7 @@ d.  	Services – Mediator classes between Resource classes and the Data Reposit
 3.  	Database Layer: A MySQL database has been used hosted using Amazon RDS. Listening on port 3306. Code has been written using JPA annotations with the underlying Hibernate engine and the Spring Data API.
 
 ## ARCHITECTURE DIAGRAM:
-![Image description] (https://github.com/psnehas/cmpe275_openHome/blob/master/images/architecture.png)
+<img src="https://github.com/psnehas/cmpe275_openHome/blob/master/images/architecture.png">
 ## DATABASE ENTITY DIAGRAM:
 ![Image description] (https://github.com/psnehas/cmpe275_openHome/blob/master/images/Database.png)
 ## Final Application WorkFlow:
