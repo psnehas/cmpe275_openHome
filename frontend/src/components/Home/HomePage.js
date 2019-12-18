@@ -7,7 +7,7 @@ import moment from "moment";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Link } from "react-router-dom";
-import NavbarOwner from "../Common/NavbarOwner/NavbarOwner";
+import NavbarUser from "../Common/NavbarUser/NavbarUser";
 class HomePage extends Component {
   constructor(props) {
     super(props);
@@ -155,7 +155,7 @@ class HomePage extends Component {
 
     return (
       <div>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top">
+        {/* <nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top">
           <div class="container">
             <a class="navbar-brand" href="#">
               <span class="websitename"> OpenHome &reg; </span>
@@ -214,7 +214,11 @@ class HomePage extends Component {
               </ul>
             </div>
           </div>
-        </nav>
+        </nav> */}
+
+        <div class="row border border-primary">
+          <NavbarUser />
+        </div>
 
         <header class="masthead">
           <div class="container h-100">

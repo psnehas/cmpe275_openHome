@@ -37,12 +37,6 @@ class NavbarOwner extends Component {
             <div class="collapse navbar-collapse" id="navbarResponsive">
               <ul class="navbar-nav ml-auto">
                 <li class="nav-item active mr-2">
-                  <Link class="nav-link" to="/home">
-                    Home
-                    <span class="sr-only">(current)</span>
-                  </Link>
-                </li>
-                <li class="nav-item active mr-2">
                   <Link class="nav-link" to="/ownerdashboard">
                     Dashboard
                   </Link>

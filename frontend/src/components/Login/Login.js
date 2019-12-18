@@ -23,7 +23,7 @@ class Login extends Component {
     console.log(this.state);
 
     // axios.defaults.withCredentials = true;
-
+    //GOOGLE LOGIN
     axios.get(API_ENDPOINT + "/user/landing").then(response => {
       console.log("ssss ", response.status);
       console.log("data  ", response.data);
@@ -64,14 +64,18 @@ class Login extends Component {
     axios.post(API_ENDPOINT + "/user/signin", requestBody).then(response => {
       console.log("ssss ", response.status);
       console.log("data  ", response.data);
-
+      //NORMAL LOGIN
       if (response.status === 200) {
         console.log(response.status);
         console.log("role", response.data);
+        window.alert("Login Successful!");
 
         this.setState({
           role: response.data
         });
+
+        // const USERROLE = response.data;
+        // window.localStorage.setItem(USERROLE, this.state.email);
 
         if (response.data == "user") {
           window.localStorage.setItem("user", this.state.email);
@@ -80,8 +84,9 @@ class Login extends Component {
           window.localStorage.setItem("host", this.state.email);
           this.props.history.push("/postproperty");
         }
+      } else if (response.status == 400) {
+        window.alert("Login Failed! Please enter username/ password");
       }
-      console.log(response);
     });
   }
 
@@ -127,10 +132,11 @@ class Login extends Component {
                         <input
                           type="checkbox"
                           class="custom-control-input"
-                          id="customCheck1"
+                          id="rolecheck"
+                          name="rolecheck"
                         />
                         <label class="custom-control-label" for="customCheck1">
-                          Remember password
+                          Check if property owner
                         </label>
                       </div>
                       <button

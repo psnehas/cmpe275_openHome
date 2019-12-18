@@ -230,6 +230,7 @@ class SignUp extends Component {
                           class="form-control"
                           name="firstName"
                           placeholder="First Name *"
+                          required
                           onChange={this.handlefirstName}
                           value={this.state.firstName}
                         />
@@ -239,6 +240,7 @@ class SignUp extends Component {
                           type="text"
                           class="form-control"
                           placeholder="Last Name *"
+                          required
                           name="lastName"
                           onChange={this.handlelastName}
                           value={this.state.lastName}
@@ -271,6 +273,7 @@ class SignUp extends Component {
                           class="form-control"
                           placeholder="Email *"
                           name="email"
+                          required
                           onChange={this.handleEmail}
                           value={this.state.email}
                         />
@@ -281,6 +284,7 @@ class SignUp extends Component {
                           minlength="10"
                           maxlength="10"
                           name="phoneNumber"
+                          required
                           onChange={this.handlePhone}
                           value={this.state.phoneNumber}
                           class="form-control"
@@ -301,6 +305,7 @@ class SignUp extends Component {
                           class="form-control"
                           placeholder="Name on card*"
                           name="nameOnCard"
+                          required
                           onChange={this.handleCardName}
                           value={this.state.nameOnCard}
                         />
@@ -311,6 +316,7 @@ class SignUp extends Component {
                           class="form-control"
                           placeholder="Card Number*"
                           name="cardNumber"
+                          required
                           onChange={this.handleCardNumber}
                           value={this.state.cardNumber}
                         />
@@ -322,6 +328,7 @@ class SignUp extends Component {
                           placeholder="CVV*"
                           name="cvv"
                           onChange={this.handleCVV}
+                          required
                           value={this.state.cvv}
                         />
                       </div>
@@ -333,6 +340,7 @@ class SignUp extends Component {
                           name="expirationDate"
                           onChange={this.handleExpiration}
                           value={this.state.expirationDate}
+                          required
                         />
                       </div>
                       <input
@@ -351,127 +359,137 @@ class SignUp extends Component {
                   aria-labelledby="profile-tab"
                 >
                   <h3 class="register-heading">Sign Up as Owner</h3>
-                  <div class="row register-form">
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <input
-                          type="text"
-                          class="form-control"
-                          name="firstName"
-                          placeholder="First Name *"
-                          onChange={this.handlefirstName}
-                          value={this.state.firstName}
-                        />
-                      </div>
-                      <div class="form-group">
-                        <input
-                          type="text"
-                          class="form-control"
-                          placeholder="Last Name *"
-                          name="lastName"
-                          onChange={this.handlelastName}
-                          value={this.state.lastName}
-                        />
-                      </div>
-                      <div class="form-group">
-                        <input
-                          type="password"
-                          class="form-control"
-                          placeholder="Password *"
-                          name="password"
-                          onChange={this.handlePassword}
-                          value={this.state.password}
-                        />
-                      </div>
-                      <div class="form-group">
-                        <input
-                          type="password"
-                          class="form-control"
-                          placeholder="Confirm Password *"
-                          name="confirmpassword"
-                          onChange={this.handleconfirmPassword}
-                          value={this.state.confirmpassword}
-                        />
-                      </div>
+                  <form>
+                    <div class="row register-form">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <input
+                            type="text"
+                            class="form-control"
+                            name="firstName"
+                            placeholder="First Name *"
+                            onChange={this.handlefirstName}
+                            value={this.state.firstName}
+                            required
+                          />
+                        </div>
+                        <div class="form-group">
+                          <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Last Name *"
+                            name="lastName"
+                            onChange={this.handlelastName}
+                            value={this.state.lastName}
+                            required
+                          />
+                        </div>
+                        <div class="form-group">
+                          <input
+                            type="password"
+                            class="form-control"
+                            placeholder="Password *"
+                            name="password"
+                            onChange={this.handlePassword}
+                            value={this.state.password}
+                          />
+                        </div>
+                        <div class="form-group">
+                          <input
+                            type="password"
+                            class="form-control"
+                            placeholder="Confirm Password *"
+                            name="confirmpassword"
+                            onChange={this.handleconfirmPassword}
+                            value={this.state.confirmpassword}
+                          />
+                        </div>
 
-                      <div class="form-group">
-                        <input
-                          type="email"
-                          class="form-control"
-                          placeholder="Email *"
-                          name="email"
-                          onChange={this.handleEmail}
-                          value={this.state.email}
-                        />
+                        <div class="form-group">
+                          <input
+                            type="email"
+                            class="form-control"
+                            placeholder="Email *"
+                            name="email"
+                            onChange={this.handleEmail}
+                            value={this.state.email}
+                            required
+                          />
+                        </div>
+                        <div class="form-group">
+                          <input
+                            type="text"
+                            minlength="10"
+                            maxlength="10"
+                            name="phoneNumber"
+                            onChange={this.handlePhone}
+                            value={this.state.phoneNumber}
+                            required
+                            class="form-control"
+                            placeholder="Phone *"
+                          />
+                        </div>
                       </div>
-                      <div class="form-group">
+                      <div class="col-md-6">
+                        <div class="form group">
+                          <p class="welcometext">
+                            {" "}
+                            Please Enter Credit Card details*{" "}
+                          </p>
+                        </div>
+                        <div class="form-group">
+                          <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Name on card*"
+                            name="nameOnCard"
+                            onChange={this.handleCardName}
+                            value={this.state.nameOnCard}
+                            required
+                          />
+                        </div>
+                        <div class="form-group">
+                          <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Card Number*"
+                            name="cardNumber"
+                            onChange={this.handleCardNumber}
+                            value={this.state.cardNumber}
+                            required
+                          />
+                        </div>
+                        <div class="form-group">
+                          <input
+                            type="text"
+                            class="form-control"
+                            placeholder="CVV*"
+                            name="cvv"
+                            onChange={this.handleCVV}
+                            value={this.state.cvv}
+                            required
+                          />
+                        </div>
+                        <div class="form-group">
+                          <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Expiration Date *"
+                            name="expirationDate"
+                            onChange={this.handleExpiration}
+                            value={this.state.expirationDate}
+                            required
+                          />
+                        </div>
                         <input
-                          type="text"
-                          minlength="10"
-                          maxlength="10"
-                          name="phoneNumber"
-                          onChange={this.handlePhone}
-                          value={this.state.phoneNumber}
-                          class="form-control"
-                          placeholder="Phone *"
+                          type="submit"
+                          class="btnRegister"
+                          value="Sign Up"
+                          onClick={this.handleOwnerSignUp}
                         />
                       </div>
                     </div>
-                    <div class="col-md-6">
-                      <div class="form group">
-                        <p class="welcometext">
-                          {" "}
-                          Please Enter Credit Card details*{" "}
-                        </p>
-                      </div>
-                      <div class="form-group">
-                        <input
-                          type="text"
-                          class="form-control"
-                          placeholder="Name on card*"
-                          name="nameOnCard"
-                          onChange={this.handleCardName}
-                          value={this.state.nameOnCard}
-                        />
-                      </div>
-                      <div class="form-group">
-                        <input
-                          type="text"
-                          class="form-control"
-                          placeholder="Card Number*"
-                          name="cardNumber"
-                          onChange={this.handleCardNumber}
-                          value={this.state.cardNumber}
-                        />
-                      </div>
-                      <div class="form-group">
-                        <input
-                          type="text"
-                          class="form-control"
-                          placeholder="CVV*"
-                          name="cvv"
-                          onChange={this.handleCVV}
-                          value={this.state.cvv}
-                        />
-                      </div>
-                      <div class="form-group">
-                        <input
-                          type="text"
-                          class="form-control"
-                          placeholder="Expiration Date *"
-                          name="expirationDate"
-                          onChange={this.handleExpiration}
-                          value={this.state.expirationDate}
-                        />
-                      </div>
-                      <input
-                        type="submit"
-                        class="btnRegister"
-                        value="Sign Up"
-                        onClick={this.handleOwnerSignUp}
-                      />
-                    </div>
-                  </div>
+                  </form>
                 </div>
               </div>
             </div>
