@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { API_ENDPOINT } from "../../constants/routes";
 
-import cardimage from "../../images/demo1.jpg";
+import cardimage from "../../images/onesouth3.jpg";
 import Navbar from "../Common/Navbar/Navbar";
 import NavbarOwner from "../Common/NavbarOwner/NavbarOwner";
 import moment from "moment";
@@ -70,9 +70,7 @@ class OwnerDashboard extends Component {
         }
       })
       .catch(error => {
-        console.log("ERROR OBJECT", error.response.data);
-
-        window.alert(error.response.data);
+        console.log("ERROR OBJECT", error);
       });
   }
 
@@ -123,8 +121,8 @@ class OwnerDashboard extends Component {
               <div class="col-md-4">
                 <img
                   class="card-img"
-                  //src={cardimage}
-                  src={property.images[0]}
+                  src={cardimage}
+                  //src={property.images[0]}
                   style={{ height: "11rem" }}
                 />{" "}
               </div>

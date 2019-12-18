@@ -161,6 +161,7 @@ class EditProperty extends Component {
   };
 
   handleEditProperty = e => {
+    window.alert("Edited Property successfully");
     e.preventDefault();
     const requestBody = {
       propertyID: this.state.propertyID,

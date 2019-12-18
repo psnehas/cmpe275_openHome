@@ -29,7 +29,7 @@ class Main extends Component {
         <Route path="/navbar" component={Navbar} />
         <Route path="/postproperty" component={PostProperty} />
         <Route path="/editproperty" component={EditProperty} />
-        <Route path="/propertydetails" component={PropertyDetails} />
+
         <Route path="/ownerdashboard" component={OwnerDashboard} />
         <Route path="/guestdashboard" component={GuestDashboard} />
         <Route path="/landingpage" component={LandingPage} />

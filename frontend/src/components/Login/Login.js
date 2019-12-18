@@ -89,9 +89,7 @@ class Login extends Component {
         }
       })
       .catch(error => {
-        console.log("ERROR OBJECT", error.response.data);
-
-        window.alert(error.response.data);
+        console.log("ERROR OBJECT", error);
       });
   }
 

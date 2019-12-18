@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { API_ENDPOINT } from "../../constants/routes";
 
-import cardimage from "../../images/demo1.jpg";
+import cardimage from "../../images/onesouth3.jpg";
 import Navbar from "../Common/Navbar/Navbar";
 import NavbarUser from "../Common/NavbarUser/NavbarUser";
 import moment from "moment";
@@ -150,11 +150,7 @@ class GuestDashboard extends Component {
           });
         }
       })
-      .catch(error => {
-        console.log("ERROR OBJECT", error.response.data);
-
-        window.alert(error.response.data);
-      });
+      .catch(error => {});
   }
 
   componentDidMount() {
@@ -205,8 +201,8 @@ class GuestDashboard extends Component {
               <div class="col-md-4">
                 <img
                   class="card-img"
-                  //src={cardimage}
-                  src={property.images[0]}
+                  src={cardimage}
+                  // src={property.images[0]}
                   style={{ height: "11rem" }}
                 />{" "}
               </div>
