@@ -11,9 +11,6 @@ Requirements file: https://docs.google.com/document/d/1rOctIX2Gr5QnzoDl3ahkj1DG1
 |Nikhil Limaye|013007644|
 |Shravani Pande|013849264|
 |Sneha|013850174|
-
-## App URL : 
-http://ec2-52-53-166-161.us-west-1.compute.amazonaws.com:3000
  
 ## Build instructions on local –
 
